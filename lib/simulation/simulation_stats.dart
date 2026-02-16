@@ -1,5 +1,6 @@
 // simulation_stats.dart
 
+/// stores the metrics of a simulation
 class SimulationStats {
   final double averageDelay;
   final int maxInboundQueue;

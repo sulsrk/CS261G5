@@ -1,24 +1,13 @@
 // runway.dart
 
-import 'enums.dart';
-import 'aircraft.dart';
+import 'package:air_traffic_sim/simulation/enums/runway_mode.dart';
+import 'package:air_traffic_sim/simulation/enums/runway_status.dart';
+import 'package:air_traffic_sim/simulation/interfaces/interface_aircraft.dart';
+import 'package:air_traffic_sim/simulation/interfaces/interface_runway.dart';
 
-
-abstract class Runway {
-  RunwayMode mode(bool emergency);
-  void assignAircraft(Aircraft a);
-
-
-  int get id;
-  int get length;
-  int get bearing;
-  RunwayStatus get status;
-  set status(RunwayStatus newStatus);
-  int get nextAvailable;
-}
-
-
-abstract class AbstractRunway implements Runway {
+/// Representation of a general runway.
+abstract class AbstractRunway implements IRunway {
+  
   final int _id;
   final int _length;
   final int _bearing;
@@ -26,9 +15,13 @@ abstract class AbstractRunway implements Runway {
   RunwayStatus runwayStat;
   int nextAvailableR;
 
+  // Constructors
+
   AbstractRunway(this._id, this._length, this._bearing)
       : runwayStat = RunwayStatus.available,
         nextAvailableR = 0;
+
+  // Getters and Setters
 
   @override
   int get id => _id;
@@ -50,27 +43,32 @@ abstract class AbstractRunway implements Runway {
   @override
   int get nextAvailable => nextAvailableR;
 
+  // Methods
+
   @override
-  void assignAircraft(Aircraft a) {
+  void assignAircraft(IAircraft a) {
   }
 }
 
-
+/// Represents a runway for landing operations only
 class LandingRunway extends AbstractRunway {
-  LandingRunway(int id, int length, int bearing) : super(id, length, bearing);
+
+  LandingRunway(super.id, super.length, super.bearing);
 
   @override
   RunwayMode mode(bool emergency) => RunwayMode.landing;
 }
 
+/// Represents a runway for take-off operations only
 class TakeOffRunway extends AbstractRunway {
-  TakeOffRunway(int id, int length, int bearing) : super(id, length, bearing);
+
+  TakeOffRunway(super.id, super.length, super.bearing);
 
   @override
   RunwayMode mode(bool emergency) => RunwayMode.takeOff;
 }
 
-
+/// Represents a runway for both landing operations and take-off operations
 class MixedRunway extends AbstractRunway {
   bool _toggle;
 
