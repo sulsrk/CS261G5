@@ -17,6 +17,12 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
 
   final TextEditingController runwayCountController =
       TextEditingController(text: "1");
+  
+  final TextEditingController mechanicalProbController =
+      TextEditingController(text: "0");
+  
+  final TextEditingController medicalProbController =
+      TextEditingController(text: "0");
 
   final TextEditingController inboundFlowController =
       TextEditingController();
@@ -31,9 +37,6 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
       TextEditingController(text: "10");
 
   final TextEditingController durationController =
-      TextEditingController(text: "1");
-
-  final TextEditingController timeStepController =
       TextEditingController(text: "1");
 
   @override
@@ -51,7 +54,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
 
                 const Text(
                   "Runway Configuration",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
 
                 const SizedBox(height: 10),
@@ -90,8 +93,33 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                 const SizedBox(height: 10),
 
                 const Text(
+                  "Emergency Probability",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+
+                const SizedBox(height: 10),
+
+                _buildNumberField(
+                  controller: mechanicalProbController,
+                  label: "Mechanical Failure Probability (0-100%)",
+                  min: 0,
+                  max: 100,
+                ),
+
+                const SizedBox(height: 10),
+
+                _buildNumberField(
+                  controller: medicalProbController,
+                  label: "Medical Emergency Probability (0-100%)",
+                  min: 0,
+                  max: 100,
+                ),
+
+                const SizedBox(height: 10),
+
+                const Text(
                   "Aircraft Flow",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
 
                 const SizedBox(height: 10),
@@ -114,7 +142,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
 
                 const Text(
                   "Operational Limits",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
 
                 const SizedBox(height: 10),
@@ -143,18 +171,20 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
 
                 const SizedBox(height: 10),
 
-                _buildNumberField(
-                  controller: timeStepController,
-                  label: "Time Step (minutes)",
-                  min: 1,
-                ),
-
-                const SizedBox(height: 10),
-
                 Center(
-                  child: ElevatedButton(
-                    onPressed: _runSimulation,
-                    child: const Text("Run Simulation"),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ElevatedButton(
+                        onPressed: _runSimulation,
+                        child: const Text("Run Simulation"),
+                      ),
+                      const SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: _realtimeModel,
+                        child: const Text("Real-Time Model"),
+                      ),
+                    ],
                   ),
                 ),
 
@@ -232,6 +262,12 @@ void _confirmRunwayCount() {
   void _runSimulation() {
     if (_formKey.currentState!.validate()) {
       Navigator.pushNamed(context, '/results');
+    }
+  }
+
+  void _realtimeModel() {
+    if (_formKey.currentState!.validate()) {
+      Navigator.pushNamed(context, '/realtime');
     }
   }
 }

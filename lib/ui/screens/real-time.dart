@@ -5,8 +5,8 @@ class RealTimeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: Text("Real-Time Screen")),
+    return Scaffold(
+      appBar: AppBar(title: const Text("Real-Time Model Screen")),
     );
   }
 }

@@ -19,9 +19,6 @@ class RunwayConfigUI {
   TextEditingController bearingController;
   TextEditingController runwayIdController;
 
-  TextEditingController mechanicalProbController;
-  TextEditingController medicalProbController;
-
   List<RunwayEventUI> events;
 
   RunwayConfigUI({
@@ -29,8 +26,6 @@ class RunwayConfigUI {
     int? length,
     int bearing = 0,
     String? runwayId,
-    double mechanicalProb = 0,
-    double medicalProb = 0,
     List<RunwayEventUI>? events,
   })  : lengthController =
             TextEditingController(text: length?.toString() ?? ""),
@@ -38,9 +33,5 @@ class RunwayConfigUI {
             TextEditingController(text: bearing.toString()),
         runwayIdController =
             TextEditingController(text: runwayId ?? ""),
-        mechanicalProbController =
-            TextEditingController(text: mechanicalProb.toString()),
-        medicalProbController =
-            TextEditingController(text: medicalProb.toString()),
         events = events ?? [];
 }

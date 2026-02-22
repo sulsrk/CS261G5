@@ -87,32 +87,6 @@ class RunwayCard extends StatelessWidget {
 
             const SizedBox(height: 10),
 
-            _buildTextField(
-              controller: runway.mechanicalProbController,
-              label: "Mechanical Failure Probability (0-1)",
-              validator: (value) {
-                if (value == null || value.isEmpty) return "This field is required";
-                final doubleVal = double.tryParse(value);
-                if (doubleVal == null || doubleVal < 0 || doubleVal > 1) return "Probability must be between 0 and 1";
-                return null;
-              },
-            ),
-
-            const SizedBox(height: 10),
-
-            _buildTextField(
-              controller: runway.medicalProbController,
-              label: "Medical Emergency Probability (0-1)",
-              validator: (value) {
-                if (value == null || value.isEmpty) return "This field is required";
-                final doubleVal = double.tryParse(value);
-                if (doubleVal == null || doubleVal < 0 || doubleVal > 1) return "Probability must be between 0 and 1";
-                return null;
-              },
-            ),
-
-            const SizedBox(height: 10),
-
             const Text(
               "Events",
               style: TextStyle(fontWeight: FontWeight.bold),
