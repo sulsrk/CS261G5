@@ -4,7 +4,7 @@ import 'runway.dart';
 import 'runway_event.dart';
 
 /// Interface for obtaining entered parameters for a general simulation.
-abstract class IParamaters {
+abstract class IParameters {
 
   /// Getters
   
@@ -12,4 +12,5 @@ abstract class IParamaters {
   double get getEmergencyProbability;
   Queue<IRunwayEvent> get getEvents;
   int get getMaxWaitTime;
+  int get getDuration;
 }
