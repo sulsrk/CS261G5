@@ -6,11 +6,11 @@ import 'package:air_traffic_sim/simulation/interfaces/report.dart';
 import 'package:air_traffic_sim/simulation/interfaces/runway_event.dart';
 import 'package:air_traffic_sim/simulation/interfaces/simulation.dart';
 import 'package:air_traffic_sim/simulation/interfaces/simulation_controller.dart';
-import 'package:air_traffic_sim/simulation/simulation_stats.dart';
+import 'package:air_traffic_sim/simulation/concretes/simulation_stats.dart';
 import 'package:flutter/widgets.dart';
 
 /// A basic implementation for a simulation.
-/// Different simulations will rely on different instantiations of the controller.
+/// Different simulations will rely on different instantiations of different controllers.
 abstract class AbstractSimulation implements ISimulation{
   @protected
   late final ISimulationController controller;

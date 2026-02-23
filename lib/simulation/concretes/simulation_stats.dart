@@ -1,6 +1,6 @@
 // simulation_stats.dart
 
-import 'package:air_traffic_sim/simulation/temp_stats.dart';
+import 'package:air_traffic_sim/simulation/concretes/temp_stats.dart';
 
 /// stores the metrics of a simulation
 class SimulationStats {
