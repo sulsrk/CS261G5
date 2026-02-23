@@ -1,5 +1,8 @@
 import 'dart:collection';
 
+import 'package:air_traffic_sim/simulation/simulation_stats.dart';
+import 'package:air_traffic_sim/simulation/temp_stats.dart';
+
 import 'airport.dart';
 import 'runway_event.dart';
 
@@ -20,5 +23,7 @@ abstract class ISimulationController {
 
   /// Divert and cancel any aircraft in the holdin pattern/take-off queues if they have too
   /// little fuel or have been delayed for too long.
-  void enactFlightChanges();
+  void enactFlightChanges(IAirport airport);
+
+  TempStats get getAggregation;
 }
