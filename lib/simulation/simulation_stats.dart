@@ -2,7 +2,18 @@
 
 /// stores the metrics of a simulation
 class SimulationStats {
-  final double averageDelay;
+  /// Mean delay (in minutes) across all processed landing aircraft.
+  final double averageLandingDelay;
+
+  /// Mean delay (in minutes) across all processed departing aircraft.
+  final double averageDepartureDelay;
+
+  /// Worst single delay (in minutes) observed for landing aircraft.
+  final double maxLandingDelay;
+
+  /// Worst single delay (in minutes) observed for departing aircraft.
+  final double maxDepartureDelay;
+
   final int maxInboundQueue;
   final int maxOutboundQueue;
   final int totalCancellations;
@@ -10,7 +21,10 @@ class SimulationStats {
   final int totalAircrafts;
 
   const SimulationStats({
-    required this.averageDelay,
+    required this.averageLandingDelay,
+    required this.averageDepartureDelay,
+    required this.maxLandingDelay,
+    required this.maxDepartureDelay,
     required this.maxInboundQueue,
     required this.maxOutboundQueue,
     required this.totalCancellations,
@@ -20,7 +34,10 @@ class SimulationStats {
 
   factory SimulationStats.empty() {
     return const SimulationStats(
-      averageDelay: 0.0,
+      averageLandingDelay: 0.0,
+      averageDepartureDelay: 0.0,
+      maxLandingDelay: 0.0,
+      maxDepartureDelay: 0.0,
       maxInboundQueue: 0,
       maxOutboundQueue: 0,
       totalCancellations: 0,
