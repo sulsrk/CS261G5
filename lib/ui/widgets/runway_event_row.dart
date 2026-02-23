@@ -31,9 +31,10 @@ class RunwayEventRow extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     DropdownButtonFormField<String>(
-                      value: event.type,
+                      initialValue: event.type,
                       items: const [
                         DropdownMenuItem(value: "Inspection", child: Text("Inspection")),
+                        DropdownMenuItem(value: "Obstruction", child: Text("Obstruction")),
                         DropdownMenuItem(value: "Maintenance", child: Text("Maintenance")),
                         DropdownMenuItem(value: "Closure", child: Text("Closure")),
                       ],
@@ -52,7 +53,7 @@ class RunwayEventRow extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 5, left: 5),
                         child: Text(
                           fieldState.errorText!,
-                          style: const TextStyle(color: Colors.red, fontSize: 12),
+                          style: const TextStyle(color: Colors.red, fontSize: 10),
                         ),
                       ),
                   ],

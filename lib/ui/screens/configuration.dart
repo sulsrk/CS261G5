@@ -49,13 +49,99 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
           key: _formKey,
           child: SingleChildScrollView(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
-                const Text(
-                  "Runway Configuration",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                const SizedBox(height: 10),
+
+                IntrinsicHeight(
+                child: 
+                  Row (
+                    children: [
+
+                      const SizedBox(height: 10),
+
+                      Expanded(child: 
+                        _buildNumberField(
+                          controller: mechanicalProbController,
+                          label: "Mechanical Failure Probability (0-100%)",
+                          min: 0,
+                          max: 100,
+                        )
+                      ),
+
+                      const SizedBox(width: 10),
+
+                      Expanded(child: 
+                        _buildNumberField(
+                          controller: medicalProbController,
+                          label: "Medical Emergency Probability (0-100%)",
+                          min: 0,
+                          max: 100,
+                        ),
+                      ),
+
+                      const SizedBox(width: 10),
+
+                      Expanded(child: 
+                        _buildNumberField(
+                          controller: inboundFlowController,
+                          label: "Inbound Flow Rate (aircraft/hour)",
+                          min: 0,
+                        ),
+                      ),
+
+                      const SizedBox(width: 10),
+
+                      Expanded(child: 
+                        _buildNumberField(
+                          controller: outboundFlowController,
+                          label: "Outbound Flow Rate (aircraft/hour)",
+                          min: 0,
+                        ),
+                      ),
+
+                      const SizedBox(width: 10),
+
+                      Expanded(child: 
+                        _buildNumberField(
+                          controller: maxWaitController,
+                          label: "Max Outbound Wait (minutes)",
+                          min: 1,
+                        ),
+                      ),
+
+                      const SizedBox(width: 10),
+
+                      Expanded(child: 
+                        _buildNumberField(
+                          controller: fuelThresholdController,
+                          label: "Fuel Diversion Threshold (minutes)",
+                          min: 1,
+                        ),
+                      ),
+
+                      const SizedBox(width: 10),
+
+                      Expanded(child: 
+                        _buildNumberField(
+                          controller: durationController,
+                          label: "Simulation Duration (hours)",
+                          min: 1,
+                        ),
+                      ),
+
+                      const SizedBox(width: 10),
+
+                    ],
+                  ),
                 ),
+
+                const SizedBox(height: 10),
+
+                Row(
+                  children: [
+
+                ],),
 
                 const SizedBox(height: 10),
 
@@ -90,86 +176,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 10),
-
-                const Text(
-                  "Emergency Probability",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-
-                const SizedBox(height: 10),
-
-                _buildNumberField(
-                  controller: mechanicalProbController,
-                  label: "Mechanical Failure Probability (0-100%)",
-                  min: 0,
-                  max: 100,
-                ),
-
-                const SizedBox(height: 10),
-
-                _buildNumberField(
-                  controller: medicalProbController,
-                  label: "Medical Emergency Probability (0-100%)",
-                  min: 0,
-                  max: 100,
-                ),
-
-                const SizedBox(height: 10),
-
-                const Text(
-                  "Aircraft Flow",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-
-                const SizedBox(height: 10),
-
-                _buildNumberField(
-                  controller: inboundFlowController,
-                  label: "Inbound Flow Rate (aircraft/hour)",
-                  min: 0,
-                ),
-
-                const SizedBox(height: 10),
-
-                _buildNumberField(
-                  controller: outboundFlowController,
-                  label: "Outbound Flow Rate (aircraft/hour)",
-                  min: 0,
-                ),
-
-                const SizedBox(height: 10),
-
-                const Text(
-                  "Operational Limits",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-
-                const SizedBox(height: 10),
-
-                _buildNumberField(
-                  controller: maxWaitController,
-                  label: "Max Outbound Wait (minutes)",
-                  min: 1,
-                ),
-
-                const SizedBox(height: 10),
-
-                _buildNumberField(
-                  controller: fuelThresholdController,
-                  label: "Fuel Diversion Threshold (minutes)",
-                  min: 1,
-                ),
-
-                const SizedBox(height: 10),
-
-                _buildNumberField(
-                  controller: durationController,
-                  label: "Simulation Duration (hours)",
-                  min: 1,
-                ),
-
-                const SizedBox(height: 10),
+                const SizedBox(width: 10),
 
                 Center(
                   child: Row(
