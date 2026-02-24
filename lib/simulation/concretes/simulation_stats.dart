@@ -1,15 +1,13 @@
-// simulation_stats.dart
-
 import 'package:air_traffic_sim/simulation/concretes/temp_stats.dart';
 
-/// stores the metrics of a simulation
+/// Stores the metrics of a simulation
 class SimulationStats {
   final double averageLandingDelay;
   final double averageHoldTime;
   final double averageDepartureDelay;
   final double averageWaitTime;
-  final double maxLandingDelay;
-  final double maxDepartureDelay;
+  final int maxLandingDelay;
+  final int maxDepartureDelay;
   final int maxInboundQueue;
   final int maxOutboundQueue;
   final int totalCancellations;
@@ -52,8 +50,8 @@ class SimulationStats {
       averageHoldTime: 0.0,
       averageDepartureDelay: 0.0, 
       averageWaitTime: 0.0,
-      maxLandingDelay: 0.0, 
-      maxDepartureDelay: 0.0,
+      maxLandingDelay: 0, 
+      maxDepartureDelay: 0,
       maxInboundQueue: 0,
       maxOutboundQueue: 0,
       totalCancellations: 0,
