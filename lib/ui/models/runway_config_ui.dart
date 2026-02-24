@@ -21,6 +21,8 @@ class RunwayConfigUI {
 
   List<RunwayEventUI> events;
 
+  bool isInvalid = false;
+
   RunwayConfigUI({
     this.mode = "Landing",
     int? length,
@@ -34,4 +36,26 @@ class RunwayConfigUI {
         runwayIdController =
             TextEditingController(text: runwayId ?? ""),
         events = events ?? [];
+
+  bool isValid() {
+    final length = int.tryParse(lengthController.text);
+    final bearing = int.tryParse(bearingController.text);
+    final runwayId = runwayIdController.text;
+
+    if (length == null || length <= 0) return false;
+    if (bearing == null || bearing < 0 || bearing > 360) return false;
+    if (!RegExp(r'^\d{2}$').hasMatch(runwayId)) return false;
+
+    for (final event in events) {
+      final start = int.tryParse(event.startController.text);
+      final duration = int.tryParse(event.durationController.text);
+
+      if (event.type.isEmpty) return false;
+      if (start == null || start < 0) return false;
+      if (duration == null || duration <= 0) return false;
+    }
+
+    return true;
+  }
+
 }

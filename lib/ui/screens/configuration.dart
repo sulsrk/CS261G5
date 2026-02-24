@@ -245,6 +245,8 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                   index: index,
                   onChanged: () {
                     setDialogState(() {});
+                    runways[index].isInvalid = false;
+                    setState(() {});
                   },
                 ),
               ),
@@ -268,14 +270,55 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
   }
 
   void _runSimulation() {
-    if (_formKey.currentState!.validate()) {
-      Navigator.pushNamed(context, '/results');
+    final mainValid = _formKey.currentState!.validate();
+
+    bool allValid = true;
+
+    for (final runway in runways) {
+      final valid = runway.isValid();
+      runway.isInvalid = !valid;
+      if (!valid) allValid = false;
     }
+
+    setState(() {}); // refresh canvas colours
+
+    if (!mainValid || !allValid) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please fix invalid runways."),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    Navigator.pushNamed(context, '/results');
   }
 
   void _realtimeModel() {
-    if (_formKey.currentState!.validate()) {
-      Navigator.pushNamed(context, '/realtime');
+    final mainValid = _formKey.currentState!.validate();
+
+    bool allValid = true;
+
+    for (final runway in runways) {
+      final valid = runway.isValid();
+      runway.isInvalid = !valid;
+      if (!valid) allValid = false;
     }
+
+    setState(() {}); // refresh canvas colours
+
+    if (!mainValid || !allValid) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please fix invalid runways."),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    Navigator.pushNamed(context, '/realtime');
   }
+
 }

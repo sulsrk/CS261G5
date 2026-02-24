@@ -33,7 +33,7 @@ class RunwayCanvas extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () => onEdit(index),
-                    child: _RunwayGraphic(index: index),
+                    child: _RunwayGraphic(index: index, runway: runways[index]),
                   ),
 
                   Positioned(
@@ -78,8 +78,12 @@ class RunwayCanvas extends StatelessWidget {
 
 class _RunwayGraphic extends StatelessWidget {
   final int index;
+  final RunwayConfigUI runway;
 
-  const _RunwayGraphic({required this.index});
+  const _RunwayGraphic({
+    required this.index,
+    required this.runway,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +91,7 @@ class _RunwayGraphic extends StatelessWidget {
       width: 500,
       height: 40,
       decoration: BoxDecoration(
-        color: Colors.grey.shade800,
+        color: runway.isInvalid ? Colors.red : Colors.black,
         borderRadius: BorderRadius.circular(4),
       ),
       alignment: Alignment.center,
