@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:math';
 
 import 'package:air_traffic_sim/simulation/concretes/sim_clock.dart';
+import 'package:air_traffic_sim/simulation/concretes/simulation_stats.dart';
 import 'package:air_traffic_sim/simulation/concretes/temp_stats.dart';
 import 'package:air_traffic_sim/simulation/enums/runway_mode.dart';
 import 'package:air_traffic_sim/simulation/interfaces/aircraft.dart';
@@ -155,9 +156,8 @@ abstract class GenerativeController implements ISimulationController{
     _stats.totalDiversions += airport.divert(_minFuelThreshold);
   }
 
-  // TODO:clone
   @override
-  TempStats get getAggregation => _stats;
+  SimulationStats get getCurrStats => SimulationStats.aggr(_stats);
 
   @protected
   IAircraft generateInbound();

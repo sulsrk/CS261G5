@@ -39,7 +39,7 @@ abstract class AbstractSimulation implements ISimulation{
     for (SimulationClock.reset(); SimulationClock.time < duration;){
       step();
     }
-    SimulationStats stats = SimulationStats.aggr(controller.getAggregation);
+    SimulationStats stats = controller.getCurrStats;
 
     throw UnimplementedError(); 
   }

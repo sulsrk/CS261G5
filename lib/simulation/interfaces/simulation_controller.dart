@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:air_traffic_sim/simulation/concretes/simulation_stats.dart';
 import 'package:air_traffic_sim/simulation/concretes/temp_stats.dart';
 
 import 'airport.dart';
@@ -24,5 +25,5 @@ abstract class ISimulationController {
   /// little fuel or have been delayed for too long.
   void enactFlightChanges(IAirport airport);
 
-  TempStats get getAggregation;
+  SimulationStats get getCurrStats;
 }
