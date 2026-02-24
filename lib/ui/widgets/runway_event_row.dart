@@ -15,105 +15,135 @@ class RunwayEventRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: FormField<String>(
-              initialValue: event.type,
-              validator: (value) {
-                if (value == null || value.isEmpty) return "Select an event type";
-                return null;
-              },
-              builder: (fieldState) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    DropdownButtonFormField<String>(
-                      initialValue: event.type,
-                      items: const [
-                        DropdownMenuItem(value: "Inspection", child: Text("Inspection")),
-                        DropdownMenuItem(value: "Obstruction", child: Text("Obstruction")),
-                        DropdownMenuItem(value: "Maintenance", child: Text("Maintenance")),
-                        DropdownMenuItem(value: "Closure", child: Text("Closure")),
-                      ],
-                      onChanged: (value) {
-                        event.type = value!;
-                        fieldState.didChange(value);
-                        onChanged();
-                      },
-                      decoration: const InputDecoration(
-                        labelText: "Event Type",
-                        border: OutlineInputBorder(),
-                      ),
+    // Wrap in a card for spacing & overflow handling
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            // If the width is small, stack vertically
+            final isNarrow = constraints.maxWidth < 500;
+
+            if (isNarrow) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _buildDropdown(),
+                  const SizedBox(height: 5),
+                  _buildStartField(),
+                  const SizedBox(height: 5),
+                  _buildDurationField(),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: IconButton(
+                      icon: const Icon(Icons.remove_circle, color: Colors.red),
+                      onPressed: onDelete,
                     ),
-                    if (fieldState.hasError)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5, left: 5),
-                        child: Text(
-                          fieldState.errorText!,
-                          style: const TextStyle(color: Colors.red, fontSize: 10),
-                        ),
-                      ),
-                  ],
-                );
-              },
-            ),
-          ),
-
-          const SizedBox(width: 10),
-
-          Expanded(
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: event.startController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: "Start",
-                    border: OutlineInputBorder(),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return "This field is required";
-                    final intVal = int.tryParse(value);
-                    if (intVal == null || intVal < 0) return "Enter a valid non-negative number";
-                    return null;
-                  },
-                ),
-              ],
-            ),
-          ),
+                ],
+              );
+            }
 
-          const SizedBox(width: 10),
-
-          Expanded(
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: event.durationController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: "Duration",
-                    border: OutlineInputBorder(),
+            // Wide layout: single row
+            return IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(child: _buildDropdown()),
+                  const SizedBox(width: 10),
+                  Expanded(child: _buildStartField()),
+                  const SizedBox(width: 10),
+                  Expanded(child: _buildDurationField()),
+                  IconButton(
+                    icon: const Icon(Icons.remove_circle, color: Colors.red),
+                    onPressed: onDelete,
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return "This field is required";
-                    final intVal = int.tryParse(value);
-                    if (intVal == null || intVal <= 0) return "Enter a valid positive number";
-                    return null;
-                  },
-                ),
-              ],
-            ),
-          ),
-
-          IconButton(
-            icon: const Icon(Icons.remove_circle, color: Colors.red),
-            onPressed: onDelete,
-          ),
-        ],
+                ],
+              ),
+            );
+          },
+        ),
       ),
+    );
+  }
+
+  Widget _buildDropdown() {
+    return FormField<String>(
+      initialValue: event.type,
+      validator: (value) {
+        if (value == null || value.isEmpty) return "Select an event type";
+        return null;
+      },
+      builder: (fieldState) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            DropdownButtonFormField<String>(
+              value: event.type,
+              items: const [
+                DropdownMenuItem(value: "Inspection", child: Text("Inspection")),
+                DropdownMenuItem(value: "Obstruction", child: Text("Obstruction")),
+                DropdownMenuItem(value: "Maintenance", child: Text("Maintenance")),
+                DropdownMenuItem(value: "Closure", child: Text("Closure")),
+              ],
+              onChanged: (value) {
+                event.type = value!;
+                fieldState.didChange(value);
+                onChanged();
+              },
+              decoration: const InputDecoration(
+                labelText: "Event Type",
+                border: OutlineInputBorder(),
+              ),
+            ),
+            if (fieldState.hasError)
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 4),
+                child: Text(
+                  fieldState.errorText!,
+                  style: const TextStyle(color: Colors.red, fontSize: 10),
+                ),
+              ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildStartField() {
+    return TextFormField(
+      controller: event.startController,
+      keyboardType: TextInputType.number,
+      decoration: const InputDecoration(
+        labelText: "Start",
+        border: OutlineInputBorder(),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) return "This field is required";
+        final intVal = int.tryParse(value);
+        if (intVal == null || intVal < 0) return "Enter a valid non-negative number";
+        return null;
+      },
+      onChanged: (_) => onChanged(),
+    );
+  }
+
+  Widget _buildDurationField() {
+    return TextFormField(
+      controller: event.durationController,
+      keyboardType: TextInputType.number,
+      decoration: const InputDecoration(
+        labelText: "Duration",
+        border: OutlineInputBorder(),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) return "This field is required";
+        final intVal = int.tryParse(value);
+        if (intVal == null || intVal <= 0) return "Enter a valid positive number";
+        return null;
+      },
+      onChanged: (_) => onChanged(),
     );
   }
 }

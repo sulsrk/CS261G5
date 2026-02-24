@@ -1,3 +1,4 @@
+import 'package:air_traffic_sim/ui/widgets/runway_canvas.dart';
 import 'package:flutter/material.dart';
 import '../models/runway_config_ui.dart';
 import '../widgets/runway_card.dart';
@@ -53,126 +54,100 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
 
                 const SizedBox(height: 10),
 
-                IntrinsicHeight(
-                child: 
-                  Row (
-                    children: [
-
-                      const SizedBox(height: 10),
-
-                      Expanded(child: 
-                        _buildNumberField(
-                          controller: mechanicalProbController,
-                          label: "Mechanical Failure Probability (0-100%)",
-                          min: 0,
-                          max: 100,
-                        )
-                      ),
-
-                      const SizedBox(width: 10),
-
-                      Expanded(child: 
-                        _buildNumberField(
-                          controller: medicalProbController,
-                          label: "Medical Emergency Probability (0-100%)",
-                          min: 0,
-                          max: 100,
-                        ),
-                      ),
-
-                      const SizedBox(width: 10),
-
-                      Expanded(child: 
-                        _buildNumberField(
-                          controller: inboundFlowController,
-                          label: "Inbound Flow Rate (aircraft/hour)",
-                          min: 0,
-                        ),
-                      ),
-
-                      const SizedBox(width: 10),
-
-                      Expanded(child: 
-                        _buildNumberField(
-                          controller: outboundFlowController,
-                          label: "Outbound Flow Rate (aircraft/hour)",
-                          min: 0,
-                        ),
-                      ),
-
-                      const SizedBox(width: 10),
-
-                      Expanded(child: 
-                        _buildNumberField(
-                          controller: maxWaitController,
-                          label: "Max Outbound Wait (minutes)",
-                          min: 1,
-                        ),
-                      ),
-
-                      const SizedBox(width: 10),
-
-                      Expanded(child: 
-                        _buildNumberField(
-                          controller: fuelThresholdController,
-                          label: "Fuel Diversion Threshold (minutes)",
-                          min: 1,
-                        ),
-                      ),
-
-                      const SizedBox(width: 10),
-
-                      Expanded(child: 
-                        _buildNumberField(
-                          controller: durationController,
-                          label: "Simulation Duration (hours)",
-                          min: 1,
-                        ),
-                      ),
-
-                      const SizedBox(width: 10),
-
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 10),
-
-                Row(
+                  Column(
                   children: [
 
-                ],),
-
-                const SizedBox(height: 10),
-
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildNumberField(
-                        controller: runwayCountController,
-                        label: "Number of Runways (1-10)",
-                        min: 1,
-                        max: 10,
-                      ),
+                    // Flow
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: _buildNumberField(
+                            controller: inboundFlowController,
+                            label: "Inbound Flow Rate (aircraft/hour)",
+                            min: 0,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: _buildNumberField(
+                            controller: outboundFlowController,
+                            label: "Outbound Flow Rate (aircraft/hour)",
+                            min: 0,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 10),
-                    ElevatedButton(
-                      onPressed: _confirmRunwayCount,
-                      child: const Text("Confirm"),
+
+                    const SizedBox(height: 10),
+
+                    // Probabilities
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: _buildNumberField(
+                            controller: mechanicalProbController,
+                            label: "Mechanical Failure Probability (0-100%)",
+                            min: 0,
+                            max: 100,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: _buildNumberField(
+                            controller: medicalProbController,
+                            label: "Medical Emergency Probability (0-100%)",
+                            min: 0,
+                            max: 100,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    // Operational Limits
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: _buildNumberField(
+                            controller: maxWaitController,
+                            label: "Max Outbound Wait (minutes)",
+                            min: 1,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: _buildNumberField(
+                            controller: fuelThresholdController,
+                            label: "Fuel Diversion Threshold (minutes)",
+                            min: 1,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: _buildNumberField(
+                            controller: durationController,
+                            label: "Simulation Duration (hours)",
+                            min: 1,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
 
                 const SizedBox(height: 10),
-
-                Column(
-                  children: List.generate(
-                    runways.length,
-                    (index) => RunwayCard(
-                      runway: runways[index],
-                      index: index,
-                      onChanged: () => setState(() {}),
-                    ),
+                
+                SizedBox(
+                  height: 300,
+                  child: RunwayCanvas(
+                    runways: runways,
+                    onAdd: _addRunway,
+                    onRemove: _removeRunway,
+                    onEdit: _editRunway,
                   ),
                 ),
 
@@ -255,16 +230,42 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
     });
   }
 
-void _confirmRunwayCount() {
-  final value = runwayCountController.text;
+  void _editRunway(int index) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: Text("Configure Runway ${index + 1}"),
+              content: SizedBox(
+                width: 600,
+                child: RunwayCard(
+                  runway: runways[index],
+                  index: index,
+                  onChanged: () {
+                    setDialogState(() {});
+                  },
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
 
-  if (value.isEmpty) return;
+  void _addRunway() {
+    setState(() {
+      runways.add(RunwayConfigUI());
+    });
+  }
 
-  final count = int.tryParse(value);
-  if (count == null || count < 1 || count > 10) return;
-
-  _updateRunways(count);
-}
+  void _removeRunway(int index) {
+    setState(() {
+      runways.removeAt(index);
+    });
+  }
 
   void _runSimulation() {
     if (_formKey.currentState!.validate()) {
