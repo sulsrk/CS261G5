@@ -18,47 +18,53 @@ class RunwayCanvas extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 825,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Stack(
         children: [
-          ...List.generate(runways.length, (index) {
-            return Positioned(
-              top: 40.0 * index,
-              left: 40,
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  GestureDetector(
-                    onTap: () => onEdit(index),
-                    child: _RunwayGraphic(index: index, runway: runways[index]),
-                  ),
-
-                  Positioned(
-                    top: -8,
-                    right: -8,
-                    child: GestureDetector(
-                      onTap: () => onRemove(index),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
-                        ),
-                        padding: const EdgeInsets.all(4),
-                        child: const Icon(
-                          Icons.close,
-                          size: 16,
-                          color: Colors.white,
+          Padding(padding: const EdgeInsets.all(16),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: List.generate(runways.length, (index) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 16), // space between runways
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      GestureDetector(
+                        onTap: () => onEdit(index),
+                        child: _RunwayGraphic(index: index, runway: runways[index]),
+                      ),
+                      Positioned(
+                        top: -8,
+                        right: -8,
+                        child: GestureDetector(
+                          onTap: () => onRemove(index),
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            padding: const EdgeInsets.all(4),
+                            child: const Icon(
+                              Icons.close,
+                              size: 16,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-            );
-          }),
+                );
+              }),
+            )
+          )),
+          
 
           Positioned(
             bottom: 10,
@@ -88,16 +94,19 @@ class _RunwayGraphic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 500,
-      height: 40,
+      width: 60,
+      height: 200,
       decoration: BoxDecoration(
         color: runway.isInvalid ? Colors.red : Colors.black,
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(6),
       ),
       alignment: Alignment.center,
-      child: Text(
-        "Runway ${index + 1}",
-        style: const TextStyle(color: Colors.white),
+      child: RotatedBox(
+        quarterTurns: 3,
+        child: Text(
+          "Runway ${index + 1}",
+          style: const TextStyle(color: Colors.white),
+        ),
       ),
     );
   }

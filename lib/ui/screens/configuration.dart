@@ -141,17 +141,14 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
 
                 const SizedBox(height: 10),
                 
-                SizedBox(
-                  height: 300,
-                  child: RunwayCanvas(
-                    runways: runways,
-                    onAdd: _addRunway,
-                    onRemove: _removeRunway,
-                    onEdit: _editRunway,
-                  ),
+                RunwayCanvas(
+                  runways: runways,
+                  onAdd: _addRunway,
+                  onRemove: _removeRunway,
+                  onEdit: _editRunway,
                 ),
 
-                const SizedBox(width: 10),
+                const SizedBox(height: 10),
 
                 Center(
                   child: Row(
@@ -258,15 +255,19 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
   }
 
   void _addRunway() {
-    setState(() {
-      runways.add(RunwayConfigUI());
-    });
+    if (runways.length < 10) {
+      setState(() {
+        runways.add(RunwayConfigUI());
+      });
+    }
   }
 
   void _removeRunway(int index) {
-    setState(() {
-      runways.removeAt(index);
-    });
+    if (runways.length > 1) {
+      setState(() {
+        runways.removeAt(index);
+      });
+    }
   }
 
   void _runSimulation() {
@@ -280,15 +281,9 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
       if (!valid) allValid = false;
     }
 
-    setState(() {}); // refresh canvas colours
+    setState(() {});
 
     if (!mainValid || !allValid) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please fix invalid runways."),
-          backgroundColor: Colors.red,
-        ),
-      );
       return;
     }
 
@@ -306,15 +301,9 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
       if (!valid) allValid = false;
     }
 
-    setState(() {}); // refresh canvas colours
+    setState(() {});
 
     if (!mainValid || !allValid) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please fix invalid runways."),
-          backgroundColor: Colors.red,
-        ),
-      );
       return;
     }
 

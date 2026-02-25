@@ -56,9 +56,9 @@ class _RunwayCardState extends State<RunwayCard> {
                   controller: widget.runway.lengthController,
                   label: "Runway Length (m)",
                   validator: (v) {
-                    if (v == null || v.isEmpty) return "Required";
+                    if (v == null || v.isEmpty) return "This field is required";
                     final val = int.tryParse(v);
-                    if (val == null || val <= 0) return "Must be positive";
+                    if (val == null || val <= 0) return "Length must be greater than 0";
                     return null;
                   },
                 ),
@@ -68,9 +68,9 @@ class _RunwayCardState extends State<RunwayCard> {
                   controller: widget.runway.bearingController,
                   label: "Bearing (0-360)",
                   validator: (v) {
-                    if (v == null || v.isEmpty) return "Required";
+                    if (v == null || v.isEmpty) return "This field is required";
                     final val = int.tryParse(v);
-                    if (val == null || val < 0 || val > 360) return "0-360";
+                    if (val == null || val < 0 || val > 360) return "Bearing must be between 0-360";
                     return null;
                   },
                 ),
@@ -80,8 +80,8 @@ class _RunwayCardState extends State<RunwayCard> {
                   controller: widget.runway.runwayIdController,
                   label: "Runway ID",
                   validator: (v) {
-                    if (v == null || v.isEmpty) return "Required";
-                    if (!RegExp(r'^\d{2}$').hasMatch(v)) return "Two digits";
+                    if (v == null || v.isEmpty) return "This field is required";
+                    if (!RegExp(r'^\d{2}$').hasMatch(v)) return "ID must be 2 digits";
                     return null;
                   },
                 ),
