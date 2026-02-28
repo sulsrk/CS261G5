@@ -42,7 +42,7 @@ class _RunwayCardState extends State<RunwayCard> {
                 _buildDropdown(
                   value: widget.runway.mode,
                   label: "Operating Mode",
-                  items: const ["Landing", "TakeOff", "Mixed"],
+                  items: const ["Landing", "Take Off", "Mixed"],
                   onChanged: (value) {
                     widget.runway.mode = value!;
                     widget.onChanged();

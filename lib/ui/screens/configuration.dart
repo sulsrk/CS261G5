@@ -16,29 +16,33 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
   int runwayCount = 1;
   List<RunwayConfigUI> runways = [RunwayConfigUI()];
 
-  final TextEditingController runwayCountController =
-      TextEditingController(text: "1");
-  
-  final TextEditingController mechanicalProbController =
-      TextEditingController(text: "0");
-  
-  final TextEditingController medicalProbController =
-      TextEditingController(text: "0");
+  final TextEditingController runwayCountController = TextEditingController(
+    text: "1",
+  );
 
-  final TextEditingController inboundFlowController =
-      TextEditingController();
+  final TextEditingController mechanicalProbController = TextEditingController(
+    text: "0",
+  );
 
-  final TextEditingController outboundFlowController =
-      TextEditingController();
+  final TextEditingController medicalProbController = TextEditingController(
+    text: "0",
+  );
 
-  final TextEditingController maxWaitController =
-      TextEditingController(text: "30");
+  final TextEditingController inboundFlowController = TextEditingController();
 
-  final TextEditingController fuelThresholdController =
-      TextEditingController(text: "10");
+  final TextEditingController outboundFlowController = TextEditingController();
 
-  final TextEditingController durationController =
-      TextEditingController(text: "1");
+  final TextEditingController maxWaitController = TextEditingController(
+    text: "30",
+  );
+
+  final TextEditingController fuelThresholdController = TextEditingController(
+    text: "10",
+  );
+
+  final TextEditingController durationController = TextEditingController(
+    text: "1",
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -51,12 +55,10 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-
                 const SizedBox(height: 10),
 
-                  Column(
+                Column(
                   children: [
-
                     // Flow
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,12 +142,16 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                 ),
 
                 const SizedBox(height: 10),
-                
-                RunwayCanvas(
-                  runways: runways,
-                  onAdd: _addRunway,
-                  onRemove: _removeRunway,
-                  onEdit: _editRunway,
+
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: RunwayCanvas(
+                    runways: runways,
+                    onAdd: _addRunway,
+                    onRemove: _removeRunway,
+                    onEdit: _editRunway,
+                  ),
                 ),
 
                 const SizedBox(height: 10),
@@ -168,7 +174,6 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                 ),
 
                 const SizedBox(height: 10),
-
               ],
             ),
           ),
@@ -309,5 +314,4 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
 
     Navigator.pushNamed(context, '/realtime');
   }
-
 }
