@@ -1,5 +1,3 @@
-// interface_runway.dart
-
 import 'package:air_traffic_sim/simulation/enums/runway_mode.dart';
 import 'package:air_traffic_sim/simulation/enums/runway_status.dart';
 
@@ -30,4 +28,5 @@ abstract class IRunway {
   int get bearing;
   RunwayStatus get status;
   int get nextAvailable;
+  bool get isAvailable;
 }
