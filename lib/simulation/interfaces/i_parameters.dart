@@ -1,10 +1,10 @@
 import 'dart:collection';
 
-import 'runway.dart';
-import 'runway_event.dart';
+import 'i_runway.dart';
+import 'i_runway_event.dart';
 
 /// Interface for obtaining entered parameters for a general simulation.
-abstract class IParamaters {
+abstract class IParameters {
 
   /// Getters
   

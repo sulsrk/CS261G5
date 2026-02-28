@@ -3,7 +3,7 @@
 import 'package:air_traffic_sim/simulation/enums/runway_mode.dart';
 import 'package:air_traffic_sim/simulation/enums/runway_status.dart';
 
-import 'aircraft.dart';
+import 'i_aircraft.dart';
 
 /// Interface for runways.
 abstract class IRunway {

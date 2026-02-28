@@ -1,7 +1,7 @@
 import 'dart:collection';
 
-import 'airport.dart';
-import 'runway_event.dart';
+import 'i_airport.dart';
+import 'i_runway_event.dart';
 
 /// Interface for the Simulation Controller - should aggregate statistics as the simulation plays out.
 abstract class ISimulationController {

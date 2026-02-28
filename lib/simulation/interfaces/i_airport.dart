@@ -1,8 +1,8 @@
 import 'package:air_traffic_sim/simulation/enums/runway_status.dart';
 import 'package:air_traffic_sim/simulation/enums/aircraft_type.dart';
 
-import 'aircraft.dart';
-import 'runway.dart';
+import 'i_aircraft.dart';
+import 'i_runway.dart';
 
 import 'package:air_traffic_sim/simulation/exceptions/aircraft_incompatibility_exception.dart';
 
