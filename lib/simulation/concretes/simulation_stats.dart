@@ -4,8 +4,10 @@ import 'package:air_traffic_sim/simulation/concretes/temp_stats.dart';
 class SimulationStats {
   final double averageLandingDelay;
   final double averageHoldTime;
+  final List<double> sectionAverageLandingDelayList;
   final double averageDepartureDelay;
   final double averageWaitTime;
+  final List<double> sectionAverageDepartureDelayList;
   final int maxLandingDelay;
   final int maxDepartureDelay;
   final int maxInboundQueue;
@@ -17,8 +19,10 @@ class SimulationStats {
   const SimulationStats({
     required this.averageLandingDelay, 
     required this.averageHoldTime,
+    required this. sectionAverageLandingDelayList,
     required this.averageDepartureDelay, 
     required this.averageWaitTime,
+    required this.sectionAverageDepartureDelayList,
     required this.maxLandingDelay,
     required this.maxDepartureDelay,
     required this.maxInboundQueue,
@@ -32,8 +36,10 @@ class SimulationStats {
     this(
       averageLandingDelay: s.totalLandingDelay / (s.landingAircraftCount - s.totalDiversions),
       averageHoldTime: s.totalHoldTime / s.landingAircraftCount,
+      sectionAverageLandingDelayList: s.sectionAverageLandingDelayList,
       averageDepartureDelay: s.totalDepartureDelay / (s.departingAircraftCount - s.totalCancellations),
       averageWaitTime: s.totalWaitTime / s.departingAircraftCount,
+      sectionAverageDepartureDelayList: s.sectionAverageDepartureDelayList,
       maxLandingDelay: s.maxLandingDelay,
       maxDepartureDelay: s.maxDepartureDelay,
       maxInboundQueue: s.maxInboundQueue,
@@ -45,11 +51,13 @@ class SimulationStats {
   
 
   factory SimulationStats.empty() {
-    return const SimulationStats(
+    return SimulationStats(
       averageLandingDelay: 0.0, 
       averageHoldTime: 0.0,
+      sectionAverageLandingDelayList: List<double>.empty(),
       averageDepartureDelay: 0.0, 
       averageWaitTime: 0.0,
+      sectionAverageDepartureDelayList: List<double>.empty(),
       maxLandingDelay: 0, 
       maxDepartureDelay: 0,
       maxInboundQueue: 0,
