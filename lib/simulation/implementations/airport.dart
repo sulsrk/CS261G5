@@ -30,6 +30,12 @@ class Airport implements IAirport {
         });
 
   @override
+  int get getHoldingCount => _holdingPattern.length;
+
+  @override
+  int get getTakeOffCount => _takeOffQueue.length;
+
+  @override
   void addToHolding(IAircraft aircraft) {
     if ((aircraft as Aircraft).getType != AircraftType.landing) {
       throw AircraftIncompatibilityException(

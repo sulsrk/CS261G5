@@ -1,5 +1,5 @@
 import 'package:air_traffic_sim/simulation/abstracts/generative_controller.dart';
-import 'package:air_traffic_sim/simulation/interfaces/aircraft.dart';
+import 'package:air_traffic_sim/simulation/interfaces/i_aircraft.dart';
 
 class UniformSimulationController extends GenerativeController{
 
