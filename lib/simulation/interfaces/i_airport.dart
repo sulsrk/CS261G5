@@ -24,7 +24,7 @@ abstract class IAirport {
   /// Throws some [RunwayException] in the case that the runway is not available, or if the runway does not exist.
   /// 
   /// Returns the delay of the aircraft that was assigned (negative if it ended up early).
-  int useRunway(int id, [bool emergency]); 
+  int useRunway(int id, bool emergency); 
 
   /// Searches through and diverts (effectively removing from the queue) all aircraft in the holding pattern with fuel levels 
   /// less than or equal to [fuelThreshold]. [fuelThreshold] must be strictly greater than 0.

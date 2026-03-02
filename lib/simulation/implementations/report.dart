@@ -38,7 +38,7 @@ class Report extends IReport {
   }
 
   @override
-  void importCSV(String str) {
+void importCSV(String str) {
 		int i = 0; // Current element index. Outside of try to report the location of any failures.
 		try {
 			List<String> data = str.split(',');
@@ -47,12 +47,12 @@ class Report extends IReport {
 
 			int length = int.parse(data[i++]);
 			// Section averages for landing delays.
-			List<double> sectionAverageLandingDelayList = List<double>.empty();
+			List<double> sectionAverageLandingDelayList = List<double>.empty(growable: true);
 			for (var j = 0; j < length; j++) {
 				sectionAverageLandingDelayList.add(double.parse(data[i++]));
 			}
 			// Section averages for departure delays.
-			List<double> sectionAverageDepartureDelayList = List<double>.empty();
+			List<double> sectionAverageDepartureDelayList = List<double>.empty(growable: true);
 			for (var j = 0; j < length; j++) {
 				sectionAverageDepartureDelayList.add(double.parse(data[i++]));
 			}
@@ -73,6 +73,9 @@ class Report extends IReport {
 				sectionAverageLandingDelayList: sectionAverageLandingDelayList,
 				sectionAverageDepartureDelayList: sectionAverageDepartureDelayList,  
 			);
+			
+			if (i != data.length) throw Exception("Excess data in csv"); // Checks that CSV data was the correct length.
+
 		} catch (e) {
 			throw CorruptCsvException(i, "CSV file is corrupted. Failed at index $i");
 		}

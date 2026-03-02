@@ -1,4 +1,5 @@
 import 'package:air_traffic_sim/simulation/concretes/simulation_stats.dart';
+import 'package:air_traffic_sim/simulation/exceptions/corrupt_csv_exception.dart';
 import 'package:air_traffic_sim/simulation/implementations/report.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -10,8 +11,8 @@ void main() {
         averageDepartureDelay: 1.2,
         averageHoldTime: 1.3,
         averageWaitTime: 1.4,
-        sectionAverageDepartureDelayList: List<double>.filled(3,1.5),
-        sectionAverageLandingDelayList: List.filled(3,1.6),
+        sectionAverageDepartureDelayList: List<double>.filled(3,1.5, growable: true),
+        sectionAverageLandingDelayList: List.filled(3,1.6, growable: true),
         maxLandingDelay: 1,
         maxDepartureDelay: 2,
         maxInboundQueue: 3,
@@ -25,7 +26,7 @@ void main() {
       expect(csv, "3,1.6,1.6,1.6,1.5,1.5,1.5,1.1,1.3,1.2,1.4,1,2,3,4,0,6,5");
     });
 
-    test('Export valid data to a CSV string', () {
+    test('Import valid data from a CSV string', () {
       final String csv = "3,1.6,1.6,1.6,1.5,1.5,1.5,1.1,1.3,1.2,1.4,1,2,3,4,0,6,5";
       Report report = Report(simulationStats: SimulationStats.empty())..importCSV(csv);
       expect(report.getStats.averageLandingDelay, 1.1);
@@ -44,8 +45,14 @@ void main() {
       expect(report.getStats.maxOutboundQueue, 4);
       expect(report.getStats.totalCancellations, 0);
       expect(report.getStats.totalDiversions, 6);
-      expect(report.getStats.totalDiversions, 5);
+      expect(report.getStats.totalAircrafts, 5);
 
+    });
+
+    test('Import invalid data from a CSV string', () {
+      final String csv = "3,1.6,1.6,,1.6,1.6,1.5,1.5,1.5,1.1,1.3,1.2,1.4,1,2,3,4,0,6,5"; // invalid landing delay list length
+      Report report = Report(simulationStats: SimulationStats.empty());
+      expect(() => report.importCSV(csv), throwsA(isA<CorruptCsvException>()));
     });
   });
 }

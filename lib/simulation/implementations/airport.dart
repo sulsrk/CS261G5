@@ -55,12 +55,19 @@ class Airport implements IAirport {
     }
     _takeOffQueue.add(aircraft);
   }
+  @override
+  IAircraft get firstInHolding => _holdingPattern.first;
+  @override
+  IAircraft get firstInTakeOff => _takeOffQueue.first;
 
   @override
-  bool isHoldingEmpty() => _holdingPattern.isEmpty;
+  bool get isHoldingEmpty => _holdingPattern.isEmpty;
 
   @override
-  bool isTakeOffEmpty() => _takeOffQueue.isEmpty;
+  bool get isTakeOffEmpty => _takeOffQueue.isEmpty;
+
+  @override
+  bool get hasEmergency => false; // TODO: Implement this. This is a placeholder to compile the project 
 
   @override
   int useRunway(int id, bool emergency) {
@@ -78,10 +85,10 @@ class Airport implements IAirport {
     IAircraft assignedAircraft;
 
     if (mode == RunwayMode.landing) {
-      if (isHoldingEmpty()) return 0;
+      if (isHoldingEmpty) return 0;
       assignedAircraft = _holdingPattern.removeFirst();
     } else {
-      if (isTakeOffEmpty()) return 0;
+      if (isTakeOffEmpty) return 0;
       assignedAircraft = _takeOffQueue.removeFirst();
     }
 
@@ -161,5 +168,5 @@ class Airport implements IAirport {
   }
 
   @override
-  List<IRunway> getRunways() => _runways;
+  List<IRunway> get getRunways => _runways;
 }

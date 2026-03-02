@@ -54,10 +54,10 @@ class SimulationStats {
     return SimulationStats(
       averageLandingDelay: 0.0, 
       averageHoldTime: 0.0,
-      sectionAverageLandingDelayList: List<double>.empty(),
+      sectionAverageLandingDelayList: List<double>.empty(growable: true),
       averageDepartureDelay: 0.0, 
       averageWaitTime: 0.0,
-      sectionAverageDepartureDelayList: List<double>.empty(),
+      sectionAverageDepartureDelayList: List<double>.empty(growable: true),
       maxLandingDelay: 0, 
       maxDepartureDelay: 0,
       maxInboundQueue: 0,

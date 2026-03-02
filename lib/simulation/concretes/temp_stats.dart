@@ -7,8 +7,8 @@ class TempStats {
   int maxOutboundQueue = 0;
   int totalCancellations = 0;
   int totalDiversions = 0;
-  List<double> sectionAverageLandingDelayList = List<double>.empty();
-  List<double> sectionAverageDepartureDelayList = List<double>.empty();
+  List<double> sectionAverageLandingDelayList = List<double>.empty(growable: true);
+  List<double> sectionAverageDepartureDelayList = List<double>.empty(growable: true);
   /// Distinct from [SimulationStats] attributes.
   int totalLandingDelay = 0;
   int totalSectionLandingDelay = 0;
