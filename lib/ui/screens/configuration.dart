@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:air_traffic_sim/persistence/app_persistence.dart';
+import 'package:air_traffic_sim/persistence/models/scenario_record.dart';
 import 'package:flutter/material.dart';
 import '../models/runway_config_ui.dart';
 import '../widgets/runway_card.dart';
@@ -15,12 +19,15 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
   int runwayCount = 1;
   List<RunwayConfigUI> runways = [RunwayConfigUI()];
 
+  final TextEditingController scenarioNameController = 
+      TextEditingController();
+      
   final TextEditingController runwayCountController =
       TextEditingController(text: "1");
-  
+
   final TextEditingController mechanicalProbController =
       TextEditingController(text: "0");
-  
+
   final TextEditingController medicalProbController =
       TextEditingController(text: "0");
 
@@ -36,7 +43,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
   final TextEditingController fuelThresholdController =
       TextEditingController(text: "10");
 
-  final TextEditingController durationController =
+  final TextEditingController durationController = 
       TextEditingController(text: "1");
 
   @override
@@ -51,6 +58,29 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
+                const Text(
+                  "Scenario",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+
+                const SizedBox(height: 10),
+
+                TextFormField(
+                  controller: scenarioNameController,
+                  decoration: const InputDecoration(
+                    labelText: "Scenario Name",
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return "Scenario name is required";
+                    }
+                    return null;
+                  },
+                ),
+
+                const SizedBox(height: 10),
 
                 const Text(
                   "Runway Configuration",
@@ -154,7 +184,6 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                 ),
 
                 const SizedBox(height: 10),
-
                 _buildNumberField(
                   controller: fuelThresholdController,
                   label: "Fuel Diversion Threshold (minutes)",
@@ -248,26 +277,86 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
     });
   }
 
-void _confirmRunwayCount() {
-  final value = runwayCountController.text;
+  void _confirmRunwayCount() {
+    final value = runwayCountController.text;
 
-  if (value.isEmpty) return;
+    if (value.isEmpty) return;
 
-  final count = int.tryParse(value);
-  if (count == null || count < 1 || count > 10) return;
+    final count = int.tryParse(value);
+    if (count == null || count < 1 || count > 10) return;
 
-  _updateRunways(count);
-}
+    _updateRunways(count);
+  }
 
-  void _runSimulation() {
-    if (_formKey.currentState!.validate()) {
-      Navigator.pushNamed(context, '/results');
+  Future<void> _runSimulation() async {
+    await _persistScenarioAndNavigate("/results");
+  }
+
+  Future<void> _realtimeModel() async {
+    await _persistScenarioAndNavigate("/realtime");
+  }
+
+  Future<void> _persistScenarioAndNavigate(String route) async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    try {
+      final savedScenario = await _persistScenario();
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Saved scenario \"${savedScenario.name}\" to SQLite")),
+      );
+      Navigator.pushNamed(context, route);
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to save scenario: $error")),
+      );
     }
   }
 
-  void _realtimeModel() {
-    if (_formKey.currentState!.validate()) {
-      Navigator.pushNamed(context, '/realtime');
-    }
+  Future<ScenarioRecord> _persistScenario() async {
+    final timestamp = DateTime.now();
+    final scenarioName = scenarioNameController.text.trim();
+    final scenarioId =
+        "${timestamp.millisecondsSinceEpoch}-${scenarioName.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]+'), "-")}";
+
+    final metadata = {
+      "runwayCount": runwayCountController.text,
+      "mechanicalProb": mechanicalProbController.text,
+      "medicalProb": medicalProbController.text,
+      "inboundFlow": inboundFlowController.text,
+      "outboundFlow": outboundFlowController.text,
+      "maxWait": maxWaitController.text,
+      "fuelThreshold": fuelThresholdController.text,
+      "duration": durationController.text,
+      "runways": runways
+          .map((runway) => {
+                "mode": runway.mode,
+                "length": runway.lengthController.text,
+                "bearing": runway.bearingController.text,
+                "runwayId": runway.runwayIdController.text,
+                "events": runway.events
+                    .map((event) => {
+                          "type": event.type,
+                          "start": event.startController.text,
+                          "duration": event.durationController.text,
+                        })
+                    .toList(),
+              })
+          .toList(),
+    };
+
+    final record = ScenarioRecord(
+      id: scenarioId,
+      name: scenarioName,
+      description: jsonEncode(metadata),
+      createdAt: timestamp.toUtc(),
+    );
+
+    await AppPersistence.instance.store.upsertScenario(record);
+    return record;
   }
 }
