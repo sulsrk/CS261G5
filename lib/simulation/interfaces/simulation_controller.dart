@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:air_traffic_sim/simulation/concretes/simulation_stats.dart';
-import 'package:air_traffic_sim/simulation/concretes/temp_stats.dart';
 
 import 'airport.dart';
 import 'runway_event.dart';
