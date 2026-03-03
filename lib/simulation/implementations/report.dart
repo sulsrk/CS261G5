@@ -33,7 +33,8 @@ class Report extends IReport {
 		_simulationStats.maxOutboundQueue,
 		_simulationStats.totalCancellations,
 		_simulationStats.totalDiversions,
-		_simulationStats.totalAircrafts,
+		_simulationStats.totalLandingAircraft,
+		_simulationStats.totalDepartingAircraft,
     ].join(',');
   }
 
@@ -69,7 +70,8 @@ void importCSV(String str) {
 				maxOutboundQueue: int.parse(data[i++]), 
 				totalCancellations: int.parse(data[i++]),
 				totalDiversions: int.parse(data[i++]), 
-				totalAircrafts: int.parse(data[i++]),
+				totalLandingAircraft: int.parse(data[i++]),
+				totalDepartingAircraft: int.parse(data[i++]),
 				sectionAverageLandingDelayList: sectionAverageLandingDelayList,
 				sectionAverageDepartureDelayList: sectionAverageDepartureDelayList,  
 			);
