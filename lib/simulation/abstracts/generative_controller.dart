@@ -5,12 +5,12 @@ import 'package:air_traffic_sim/simulation/concretes/sim_clock.dart';
 import 'package:air_traffic_sim/simulation/concretes/simulation_stats.dart';
 import 'package:air_traffic_sim/simulation/concretes/temp_stats.dart';
 import 'package:air_traffic_sim/simulation/enums/runway_mode.dart';
-import 'package:air_traffic_sim/simulation/interfaces/aircraft.dart';
-import 'package:air_traffic_sim/simulation/interfaces/airport.dart';
+import 'package:air_traffic_sim/simulation/interfaces/i_aircraft.dart';
+import 'package:air_traffic_sim/simulation/interfaces/i_airport.dart';
 import 'package:air_traffic_sim/simulation/interfaces/rate_parameters.dart';
-import 'package:air_traffic_sim/simulation/interfaces/runway.dart';
-import 'package:air_traffic_sim/simulation/interfaces/runway_event.dart';
-import 'package:air_traffic_sim/simulation/interfaces/simulation_controller.dart';
+import 'package:air_traffic_sim/simulation/interfaces/i_runway.dart';
+import 'package:air_traffic_sim/simulation/interfaces/i_runway_event.dart';
+import 'package:air_traffic_sim/simulation/interfaces/i_simulation_controller.dart';
 import 'package:flutter/material.dart';
 
 
