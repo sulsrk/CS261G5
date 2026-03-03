@@ -14,7 +14,10 @@ class SimulationStats {
   final int maxOutboundQueue;
   final int totalCancellations;
   final int totalDiversions;
-  final int totalAircrafts;
+  final int totalLandingAircraft;
+  final int totalDepartingAircraft;
+
+  int get totalAircraft => totalLandingAircraft + totalDepartingAircraft;
 
   const SimulationStats({
     required this.averageLandingDelay, 
@@ -29,7 +32,8 @@ class SimulationStats {
     required this.maxOutboundQueue,
     required this.totalCancellations,
     required this.totalDiversions,
-    required this.totalAircrafts
+    required this.totalLandingAircraft,
+    required this.totalDepartingAircraft
   });
 
   SimulationStats.aggr(TempStats s) :
@@ -46,7 +50,8 @@ class SimulationStats {
       maxOutboundQueue: s.maxOutboundQueue,
       totalCancellations: s.totalCancellations,
       totalDiversions: s.totalDiversions,
-      totalAircrafts: s.departingAircraftCount + s.landingAircraftCount 
+      totalDepartingAircraft: s.departingAircraftCount,
+      totalLandingAircraft: s.landingAircraftCount
     );
   
 
@@ -64,7 +69,8 @@ class SimulationStats {
       maxOutboundQueue: 0,
       totalCancellations: 0,
       totalDiversions: 0,
-      totalAircrafts: 0, 
+      totalDepartingAircraft: 0, 
+      totalLandingAircraft: 0
     );
   }
 
