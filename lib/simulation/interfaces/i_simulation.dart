@@ -1,4 +1,4 @@
-import 'package:air_traffic_sim/simulation/interfaces/report.dart';
+import 'package:air_traffic_sim/simulation/interfaces/i_report.dart';
 
 abstract class ISimulation {
   /// Master method for starting the simulation.
