@@ -24,6 +24,4 @@ abstract class IAircraft {
   String get getOrigin;
   String get getDestination;
   int get getAltitude;
-
 }
-

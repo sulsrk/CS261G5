@@ -110,21 +110,24 @@ abstract class AbstractController implements ISimulationController{
     // Assign
     runway.assignAircraft(aircraft);
     // Update aggregation.
-    int delay = max<int>(0,aircraft.getScheduledTime - SimulationClock.time);
-
-    _stats.maxDepartureDelay = max<int>(_stats.maxDepartureDelay,delay);
-    _stats.totalDepartureDelay += delay;
+    int delay = aircraft.getScheduledTime - SimulationClock.time;
+    if (delay > 0){
+      _stats.maxDepartureDelay = max<int>(_stats.maxDepartureDelay,delay);
+      _stats.totalDepartureDelay += delay;
+    }
     _stats.totalWaitTime += max<int>(0,aircraft.getActualTime - SimulationClock.time);
   }
 
+  @protected
   void land(IRunway runway, IAircraft aircraft){
     // Assign
     runway.assignAircraft(aircraft);
     // Update aggregation.
-    int delay = max<int>(0,aircraft.getScheduledTime - SimulationClock.time);
-
-    _stats.maxLandingDelay = max<int>(_stats.maxLandingDelay,delay);
-    _stats.totalLandingDelay += delay;
+    int delay = aircraft.getScheduledTime - SimulationClock.time;
+    if (delay > 0){
+      _stats.maxLandingDelay = max<int>(_stats.maxLandingDelay,delay);
+      _stats.totalLandingDelay += delay;
+    }
     _stats.totalHoldTime += max<int>(0,aircraft.getActualTime - SimulationClock.time);
   }
 
