@@ -117,6 +117,7 @@ abstract class AbstractController implements ISimulationController{
     _stats.totalWaitTime += max<int>(0,aircraft.getActualTime - SimulationClock.time);
   }
 
+  @protected
   void land(IRunway runway, IAircraft aircraft){
     // Assign
     runway.assignAircraft(aircraft);
