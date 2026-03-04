@@ -21,14 +21,15 @@ void main() {
         totalDiversions: 6,
         totalLandingAircraft: 5,
 				totalDepartingAircraft: 7,
+        runwayUtilisation: 0.5,
       );
       final Report report = Report(simulationStats: stats);
       String csv = report.exportCSV();
-      expect(csv, "3,1.6,1.6,1.6,1.5,1.5,1.5,1.1,1.3,1.2,1.4,1,2,3,4,0,6,5,7");
+      expect(csv, "3,1.6,1.6,1.6,1.5,1.5,1.5,1.1,1.3,1.2,1.4,1,2,3,4,0,6,5,7,0.5");
     });
 
     test('Import valid data from a CSV string', () {
-      final String csv = "3,1.6,1.6,1.6,1.5,1.5,1.5,1.1,1.3,1.2,1.4,1,2,3,4,0,6,5,7";
+      final String csv = "3,1.6,1.6,1.6,1.5,1.5,1.5,1.1,1.3,1.2,1.4,1,2,3,4,0,6,5,7,0.5";
       Report report = Report(simulationStats: SimulationStats.empty())..importCSV(csv);
       expect(report.getStats.averageLandingDelay, 1.1);
       expect(report.getStats.averageDepartureDelay, 1.2);
@@ -48,11 +49,11 @@ void main() {
       expect(report.getStats.totalDiversions, 6);
       expect(report.getStats.totalLandingAircraft, 5);
 	  	expect(report.getStats.totalDepartingAircraft, 7);
-
+      expect(report.getStats.runwayUtilisation, 0.5);
     });
 
     test('Import invalid data from a CSV string', () {
-      final String csv = "3,1.6,1.6,,1.6,1.6,1.5,1.5,1.5,1.1,1.3,1.2,1.4,1,2,3,4,0,6,5,7"; // invalid landing delay list length
+      final String csv = "3,1.6,1.6,,1.6,1.6,1.5,1.5,1.5,1.1,1.3,1.2,1.4,1,2,3,4,0,6,5,7,0.5"; // invalid landing delay list length
       Report report = Report(simulationStats: SimulationStats.empty());
       expect(() => report.importCSV(csv), throwsA(isA<CorruptCsvException>()));
     });

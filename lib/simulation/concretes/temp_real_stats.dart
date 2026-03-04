@@ -23,6 +23,9 @@ class TempRealStats extends TempStats {
 
     required int landingAircraft,
     required int departingAircraft,
+
+    required int runwaysUsed,
+    required int availableRunways,
     }) {
       super.update(
         landingDelay: landingDelay, 
@@ -32,7 +35,9 @@ class TempRealStats extends TempStats {
         cancellations: cancellations, 
         diversions: diversions, 
         landingAircraft: landingAircraft, 
-        departingAircraft: departingAircraft
+        departingAircraft: departingAircraft,
+        runwaysUsed: runwaysUsed,
+        availableRunways: availableRunways,
       );
 
       // Exponential moving average.

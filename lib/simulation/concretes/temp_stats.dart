@@ -20,6 +20,8 @@ class TempStats {
   int sectionLandingAircraftCount = 0;
   int departingAircraftCount = 0;
   int sectionDepartingAircraftCount = 0;
+  int totalRunwayUsage = 0;
+  int maximumPossibleRunwayUsage = 0;
 
   // Variables to handle section delay.
   int _counter = 0;           // Number of intervals in current section.
@@ -38,6 +40,9 @@ class TempStats {
 
     required int landingAircraft,
     required int departingAircraft,
+
+    required int runwaysUsed,
+    required int availableRunways,
     }) {
 
       // Maximums.
@@ -65,6 +70,9 @@ class TempStats {
       sectionLandingAircraftCount += landingAircraft;
       departingAircraftCount += departingAircraft;
       sectionDepartingAircraftCount += departingAircraft;
+
+      totalRunwayUsage += runwaysUsed;
+      maximumPossibleRunwayUsage += availableRunways;
 
       // Section average accumulation.
 

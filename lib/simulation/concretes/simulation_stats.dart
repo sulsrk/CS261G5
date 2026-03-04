@@ -16,6 +16,7 @@ class SimulationStats {
   final int totalDiversions;
   final int totalLandingAircraft;
   final int totalDepartingAircraft;
+  final double runwayUtilisation;
 
   int get totalAircraft => totalLandingAircraft + totalDepartingAircraft;
 
@@ -33,7 +34,8 @@ class SimulationStats {
     required this.totalCancellations,
     required this.totalDiversions,
     required this.totalLandingAircraft,
-    required this.totalDepartingAircraft
+    required this.totalDepartingAircraft,
+    required this.runwayUtilisation
   });
 
   SimulationStats.aggr(TempStats s) :
@@ -51,7 +53,8 @@ class SimulationStats {
       totalCancellations: s.totalCancellations,
       totalDiversions: s.totalDiversions,
       totalDepartingAircraft: s.departingAircraftCount,
-      totalLandingAircraft: s.landingAircraftCount
+      totalLandingAircraft: s.landingAircraftCount,
+      runwayUtilisation: s.totalRunwayUsage / s.maximumPossibleRunwayUsage,
     );
   
 
@@ -70,12 +73,8 @@ class SimulationStats {
       totalCancellations: 0,
       totalDiversions: 0,
       totalDepartingAircraft: 0, 
-      totalLandingAircraft: 0
+      totalLandingAircraft: 0,
+      runwayUtilisation: 0,
     );
-  }
-
-  @override
-  String toString() {
-    return "";
   }
 }
