@@ -73,9 +73,4 @@ class SimulationStats {
       totalLandingAircraft: 0
     );
   }
-
-  @override
-  String toString() {
-    return "";
-  }
 }

@@ -7,7 +7,7 @@ import 'package:air_traffic_sim/simulation/concretes/temp_stats.dart';
 import 'package:air_traffic_sim/simulation/enums/runway_mode.dart';
 import 'package:air_traffic_sim/simulation/interfaces/i_aircraft.dart';
 import 'package:air_traffic_sim/simulation/interfaces/i_airport.dart';
-import 'package:air_traffic_sim/simulation/interfaces/rate_parameters.dart';
+import 'package:air_traffic_sim/simulation/interfaces/i_parameters.dart';
 import 'package:air_traffic_sim/simulation/interfaces/i_runway.dart';
 import 'package:air_traffic_sim/simulation/interfaces/i_runway_event.dart';
 import 'package:air_traffic_sim/simulation/interfaces/i_simulation_controller.dart';
@@ -16,31 +16,25 @@ import 'package:flutter/material.dart';
 abstract class AbstractController implements ISimulationController{
   late final TempStats _stats;
 
-  @protected late final int inRate;
-  @protected late final int outRate;
   @protected late final double emergencyProb;
 
   late final int _maxWaitTime;
-  static const int _minFuelThreshold = 10; 
-  static const int _maxRate = 60;
+  late final int _minFuelThreshold; 
 
   /// Basic constructor which initialises all constants.
   /// 
   /// [p] represents the parameters entered for a 'rate-controlled' simulation.
-  AbstractController(IRateParameters p){
+  AbstractController(IParameters p){
     _stats = TempStats(); // Initialises with all values set to 0.
-
-    inRate = p.getInboundRate; 
-    if (inRate <= 0 || inRate > _maxRate) throw ArgumentError("Inbound rate must be between 1-$_maxRate (inclusive).");
-
-    outRate = p.getOutboundRate;
-    if (outRate <= 0 || outRate > _maxRate) throw ArgumentError("Outbound rate must be between 1-$_maxRate (inclusive).");
 
     emergencyProb = p.getEmergencyProbability;
     if (emergencyProb < 0 || emergencyProb > 1) throw ArgumentError("Emergency probability must be between 0-1 (inclusive).");
 
     _maxWaitTime = p.getMaxWaitTime;
     if(_maxWaitTime <= 0) throw ArgumentError("Maximum wait time must be greater than 0 (minutes).");
+
+    _minFuelThreshold = p.getMinFuelThreshold;
+    if (_minFuelThreshold <= 0) throw ArgumentError("Minimum fuel threshold must be greater than 0");
   }
 
   /// @inheritdoc

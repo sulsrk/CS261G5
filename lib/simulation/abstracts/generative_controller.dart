@@ -20,9 +20,6 @@ abstract class GenerativeController extends AbstractController{
   GenerativeController(super.p) {
     inbounds = PriorityQueue<IAircraft>(compareAircraftForGen);
     outbounds = PriorityQueue<IAircraft>(compareAircraftForGen);
-
-    generateInbounds();
-    generateOutbounds();
   }
 
   @override
