@@ -65,18 +65,6 @@ class _RunwayCardState extends State<RunwayCard> {
                 const SizedBox(height: 10),
 
                 _buildNumberField(
-                  controller: widget.runway.bearingController,
-                  label: "Bearing (0-360)",
-                  validator: (v) {
-                    if (v == null || v.isEmpty) return "This field is required";
-                    final val = int.tryParse(v);
-                    if (val == null || val < 0 || val > 360) return "Bearing must be between 0-360";
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 10),
-
-                _buildNumberField(
                   controller: widget.runway.runwayIdController,
                   label: "Runway ID",
                   validator: (v) {

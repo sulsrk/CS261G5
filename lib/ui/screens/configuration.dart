@@ -292,7 +292,31 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
       return;
     }
 
-    Navigator.pushNamed(context, '/results');
+    Navigator.pushNamed(
+      context,
+      '/results',
+      arguments: {
+        "metrics": {
+          "maxInboundDelay": 12,
+          "maxOutboundDelay": 18,
+          "avgInboundQueue": 3.2,
+          "maxInboundQueue": 9,
+          "avgOutboundQueue": 2.4,
+          "maxOutboundQueue": 7,
+          "diversions": 1,
+          "cancellations": 0,
+          "utilisationPct": 73.5,
+        },
+        "config": {
+          "Inbound Flow Rate": inboundFlowController.text,
+          "Outbound Flow Rate": outboundFlowController.text,
+          "Runway Count": runways.length,
+          // add more config fields + runway configs
+        },
+        // optional later:
+        // "series": {...}
+      },
+    );
   }
 
   void _realtimeModel() {
