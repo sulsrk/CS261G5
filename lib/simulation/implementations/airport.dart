@@ -56,9 +56,9 @@ class Airport implements IAirport {
     _takeOffQueue.add(aircraft);
   }
   @override
-  IAircraft get firstInHolding => _holdingPattern.first;
+  IAircraft get firstInHolding => _holdingPattern.removeFirst();
   @override
-  IAircraft get firstInTakeOff => _takeOffQueue.first;
+  IAircraft get firstInTakeOff => _takeOffQueue.removeFirst();
 
   @override
   bool get isHoldingEmpty => _holdingPattern.isEmpty;
@@ -67,7 +67,7 @@ class Airport implements IAirport {
   bool get isTakeOffEmpty => _takeOffQueue.isEmpty;
 
   @override
-  bool get hasEmergency => false; // TODO: Implement this. This is a placeholder to compile the project 
+  bool get hasEmergency => _holdingPattern.first.isEmergency(); 
 
   @override
   int useRunway(int id, bool emergency) {

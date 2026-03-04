@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:air_traffic_sim/simulation/concretes/sim_clock.dart';
+import 'package:air_traffic_sim/simulation/implementations/airport.dart';
 import 'package:air_traffic_sim/simulation/interfaces/i_airport.dart';
 import 'package:air_traffic_sim/simulation/interfaces/i_parameters.dart';
 import 'package:air_traffic_sim/simulation/interfaces/i_report.dart';
@@ -28,7 +29,7 @@ abstract class AbstractSimulation implements ISimulation{
     events = param.getEvents;
     duration = param.getDuration;
 
-    // TODO: INITIALISE AIRPORT
+    airport = Airport(param.getRunways);
   }
 
   /// Public wrapper - only controls the advancing of time steps.
