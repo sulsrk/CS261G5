@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'i_airport.dart';
 import 'i_runway_event.dart';
+import 'package:air_traffic_sim/simulation/concretes/simulation_stats.dart';
 
 /// Interface for the Simulation Controller - should aggregate statistics as the simulation plays out.
 abstract class ISimulationController {
@@ -20,5 +21,7 @@ abstract class ISimulationController {
 
   /// Divert and cancel any aircraft in the holdin pattern/take-off queues if they have too
   /// little fuel or have been delayed for too long.
-  void enactFlightChanges();
+  void enactFlightChanges(IAirport airport);
+
+  SimulationStats get getCurrStats;
 }

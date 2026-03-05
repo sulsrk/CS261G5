@@ -12,4 +12,5 @@ abstract class IParameters {
   double get getEmergencyProbability;
   Queue<IRunwayEvent> get getEvents;
   int get getMaxWaitTime;
+  int get getDuration;
 }

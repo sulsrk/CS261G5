@@ -16,12 +16,9 @@ abstract class IAirport {
   /// Throws an [AircraftIncompatibilityException] if [aircraft] is not of type [AircraftType.takeOff].
   void addToTakeOff(IAircraft aircraft); 
 
-  bool isHoldingEmpty(); 
-  bool isTakeOffEmpty(); 
-
   /// Attempts to make use of a runway specified by [id] by assigning it an aircraft from the holding pattern/take-off queue 
   /// depending on whether the runway is in [RunwayMode.landing]/[RunwayMode.takeOff] respectively.
-  /// [emergency] should specify whether there exists an aircraft with some emergency status in the holding pattern. 
+  /// [emergency] (optional) should specify whether there exists an aircraft with some emergency status in the holding pattern. 
   /// This is needed for the mixed runway type checks.
   /// 
   /// Throws some [RunwayException] in the case that the runway is not available, or if the runway does not exist.
@@ -49,5 +46,18 @@ abstract class IAirport {
   /// Getters
 
   IRunway? getRunway(int id); 
-  List<IRunway> getRunways(); 
+  List<IRunway> get getRunways; 
+
+  /// Returns the next aircraft scheduled to land/take-off, removing them from their
+  /// respective queues.
+  IAircraft get firstInHolding;
+  IAircraft get firstInTakeOff;
+
+  int get getHoldingCount;
+  int get getTakeOffCount;
+
+  bool get isHoldingEmpty => (getHoldingCount == 0); 
+  bool get isTakeOffEmpty => (getTakeOffCount == 0); 
+
+  bool get hasEmergency;
 }
