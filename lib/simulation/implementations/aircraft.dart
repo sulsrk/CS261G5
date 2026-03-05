@@ -1,30 +1,27 @@
 import 'package:air_traffic_sim/simulation/enums/emergency_status.dart';
-import 'package:air_traffic_sim/simulation/enums/aircraft_type.dart';
 import 'package:air_traffic_sim/simulation/interfaces/i_aircraft.dart';
 
-class Aircraft implements IAircraft {
+abstract class RAircraft implements IAircraft {
   final String _id;
   final int _scheduledTime;
-  int _actualTime;
+  final int _actualTime; 
   int _fuelLevel;
   EmergencyStatus _status;
-  int _altitude;
   final String _operator;
   final String _origin;
   final String _destination;
-  final AircraftType _type;
+  int _altitude;
 
-  Aircraft({
+  RAircraft({
     required String id,
     required int scheduledTime,
-    int actualTime = 0,
+    required int actualTime, 
     required int fuelLevel,
-    EmergencyStatus status = EmergencyStatus.none, 
+    EmergencyStatus status = EmergencyStatus.none,
     required String flightOperator,
     required String origin,
     required String destination,
     required int altitude,
-    required AircraftType type,
   })  : _id = id,
         _scheduledTime = scheduledTime,
         _actualTime = actualTime,
@@ -33,8 +30,7 @@ class Aircraft implements IAircraft {
         _operator = flightOperator,
         _origin = origin,
         _destination = destination,
-        _altitude = altitude,
-        _type = type;
+        _altitude = altitude;
 
   @override
   bool isEmergency() => _status != EmergencyStatus.none;
@@ -66,13 +62,38 @@ class Aircraft implements IAircraft {
   @override
   int get getAltitude => _altitude;
 
-  AircraftType get getType => _type;
-
+  // Setters for the simulation engine
   void consumeFuel(int amount) => _fuelLevel -= amount;
-
-  void updateActualTime(int time) => _actualTime = time;
-
   void updateAltitude(int newAltitude) => _altitude = newAltitude;
-  
   void setEmergencyStatus(EmergencyStatus newStatus) => _status = newStatus;
+}
+
+/// Concrete implementation for an Inbound Aircraft
+class InboundAircraft extends RAircraft {
+  InboundAircraft({
+    required super.id,
+    required super.scheduledTime,
+    required super.actualTime,
+    required super.fuelLevel,
+    super.status,
+    required super.flightOperator,
+    required super.origin,
+    required super.destination,
+    required super.altitude,
+  });
+}
+
+/// Concrete implementation for an Outbound Aircraft 
+class OutboundAircraft extends RAircraft {
+  OutboundAircraft({
+    required super.id,
+    required super.scheduledTime,
+    required super.actualTime,
+    required super.fuelLevel,
+    super.status,
+    required super.flightOperator,
+    required super.origin,
+    required super.destination,
+    super.altitude = 0, // Ground level by default
+  });
 }

@@ -7,7 +7,7 @@ import 'package:air_traffic_sim/simulation/concretes/temp_stats.dart';
 import 'package:air_traffic_sim/simulation/enums/runway_mode.dart';
 import 'package:air_traffic_sim/simulation/interfaces/aircraft.dart';
 import 'package:air_traffic_sim/simulation/interfaces/airport.dart';
-import 'package:air_traffic_sim/simulation/interfaces/rate_parameters.dart';
+import 'package:air_traffic_sim/simulation/interfaces/i_rate_parameters.dart';
 import 'package:air_traffic_sim/simulation/interfaces/runway.dart';
 import 'package:air_traffic_sim/simulation/interfaces/runway_event.dart';
 import 'package:air_traffic_sim/simulation/interfaces/simulation_controller.dart';
