@@ -1,17 +1,10 @@
-/// Integration tests for the SQLite persistence layer.
-///
-/// These tests verify:
-/// 1) The database schema is created correctly (tables, indexes, constraints).
-/// 2) Repository APIs support full insert → read “round-trip” workflows.
-/// 3) All DateTime values are stored and mapped deterministically in UTC.
-///
-/// Each test uses a fresh temporary database to avoid shared state.
+// Integration checks for the SQLite persistence layer.
 import 'package:air_traffic_sim/persistence/database.dart';
 import 'dart:io';
 
 import 'package:air_traffic_sim/persistence/models/scenario_record.dart';
 import 'package:air_traffic_sim/persistence/repositories/sqlite/sqlite_persistence_store.dart';
-import 'package:air_traffic_sim/simulation/simulation_stats.dart';
+import 'package:air_traffic_sim/simulation/concretes/simulation_stats.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqlite3/sqlite3.dart';
 
@@ -27,9 +20,7 @@ void main() {
       harness.dispose();
     });
 
-    // Ensures schema bootstrap creates all required tables, indexes,
-    // uniqueness constraints, and enforces foreign key behavior.
-    test('schema bootstrap creates expected tables, constraints, indexes and FK behavior', () {
+    test('schema bootstrap creates expected tables, constraints, indexes and FK behaviour', () {
       final db = harness.provider.database;
 
       final tables = db
@@ -66,6 +57,7 @@ void main() {
           .toSet();
       expect(metricsColumns, isNot(contains('scenario_id')));
 
+      // Missing scenario should fail FK checks.
       expect(
         () => db.execute(
           'INSERT INTO runs (scenario_id, started_at, status) VALUES (?, ?, ?)',
@@ -75,8 +67,6 @@ void main() {
       );
     });
 
-    // Simulates a full simulation lifecycle and verifies all repositories
-    // correctly persist and retrieve domain data.
     test('repositories support scenario/run/event/log/metrics round-trips', () async {
       final scenarioA = ScenarioRecord(
         id: 'scenario-A',
@@ -140,14 +130,20 @@ void main() {
           runId: runId,
           stats: const SimulationStats(
             averageLandingDelay: 1.5,
+            averageHoldTime: 1.5,
+            sectionAverageLandingDelayList: const [],
             averageDepartureDelay: 1.5,
-            maxLandingDelay: 1.5,
-            maxDepartureDelay: 1.5,
+            averageWaitTime: 1.5,
+            sectionAverageDepartureDelayList: const [],
+            maxLandingDelay: 1,
+            maxDepartureDelay: 1,
             maxInboundQueue: 2,
             maxOutboundQueue: 3,
             totalCancellations: 0,
             totalDiversions: 1,
-            totalAircrafts: 4,
+            totalLandingAircraft: 2,
+            totalDepartingAircraft: 2,
+            runwayUtilisation: 0.5,
           ),
           createdAt: DateTime.utc(2026, 1, 3, 12, 8),
         );
@@ -170,14 +166,20 @@ void main() {
           runId: scenarioBRunId,
           stats: const SimulationStats(
             averageLandingDelay: 9.5,
+            averageHoldTime: 9.5,
+            sectionAverageLandingDelayList: const [],
             averageDepartureDelay: 9.5,
-            maxLandingDelay: 9.5,
-            maxDepartureDelay: 9.5,
+            averageWaitTime: 9.5,
+            sectionAverageDepartureDelayList: const [],
+            maxLandingDelay: 9,
+            maxDepartureDelay: 9,
             maxInboundQueue: 8,
             maxOutboundQueue: 7,
             totalCancellations: 6,
             totalDiversions: 5,
-            totalAircrafts: 4,
+            totalLandingAircraft: 2,
+            totalDepartingAircraft: 2,
+            runwayUtilisation: 0.9,
           ),
           createdAt: DateTime.utc(2026, 1, 3, 13, 8),
         );
@@ -201,8 +203,8 @@ void main() {
       expect(summaryByRun!.scenarioId, scenarioA.id);
       expect(summaryByRun.stats.averageLandingDelay, 1.5);
       expect(summaryByRun.stats.averageDepartureDelay, 1.5);
-      expect(summaryByRun.stats.maxLandingDelay, 1.5);
-      expect(summaryByRun.stats.maxDepartureDelay, 1.5);
+      expect(summaryByRun.stats.maxLandingDelay, 1);
+      expect(summaryByRun.stats.maxDepartureDelay, 1);
 
       final summariesByScenario = await harness.metricsRepository.listSummariesByScenario(scenarioA.id);
       expect(summariesByScenario, hasLength(1));
@@ -214,8 +216,6 @@ void main() {
       expect(scenarioBSummaries.single.scenarioId, scenarioB.id);
     });
 
-    // Verifies that all DateTime values are stored as UTC ISO-8601 strings
-    // and map back to identical UTC DateTime objects.
     test('date values are stored as UTC ISO strings and map back deterministically', () async {
       final sourceDate = DateTime.utc(2027, 3, 14, 9, 26, 53);
       final scenario = ScenarioRecord(
@@ -269,14 +269,20 @@ void main() {
           runId: runId,
           stats: const SimulationStats(
             averageLandingDelay: 0.5,
+            averageHoldTime: 0.5,
+            sectionAverageLandingDelayList: const [],
             averageDepartureDelay: 0.5,
-            maxLandingDelay: 0.5,
-            maxDepartureDelay: 0.5,
+            averageWaitTime: 0.5,
+            sectionAverageDepartureDelayList: const [],
+            maxLandingDelay: 0,
+            maxDepartureDelay: 0,
             maxInboundQueue: 1,
             maxOutboundQueue: 1,
             totalCancellations: 0,
             totalDiversions: 0,
-            totalAircrafts: 1,
+            totalLandingAircraft: 1,
+            totalDepartingAircraft: 0,
+            runwayUtilisation: 0.1,
           ),
           createdAt: summaryCreatedAt,
         );
@@ -376,8 +382,7 @@ bool _sameColumnSet(List<String> a, List<String> b) {
   return aSet.length == a.length && bSet.length == b.length && aSet.containsAll(bSet);
 }
 
-/// Test harness that creates an isolated temporary SQLite database
-/// and exposes repositories backed by that database.
+// Shared setup for SQLite repository tests.
 class _PersistenceTestHarness {
   final Directory tempDir;
   final DatabaseProvider provider;

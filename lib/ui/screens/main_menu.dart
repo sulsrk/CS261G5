@@ -20,6 +20,13 @@ class MainMenu extends StatelessWidget {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
+                Navigator.pushNamed(context, '/compare');
+              },
+              child: const Text("View Saved Scenarios"),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
                 Navigator.pushNamed(context, '/results');
               },
               child: const Text("View Results"),
