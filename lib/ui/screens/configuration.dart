@@ -33,10 +33,8 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
 
   final TextEditingController inboundFlowController =
       TextEditingController();
-
   final TextEditingController outboundFlowController =
       TextEditingController();
-
   final TextEditingController maxWaitController =
       TextEditingController(text: "30");
 
@@ -58,6 +56,16 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
+                TextFormField(
+                  controller: scenarioNameController,
+                  decoration: const InputDecoration(
+                    labelText: "Scenario Name (optional for real-time)",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+
+                const SizedBox(height: 10),
 
                 const Text(
                   "Scenario",
@@ -86,7 +94,6 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                   "Runway Configuration",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-
                 const SizedBox(height: 10),
 
                 Row(
@@ -106,7 +113,6 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 10),
 
                 Column(
@@ -119,14 +125,12 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 10),
 
                 const Text(
                   "Emergency Probability",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-
                 const SizedBox(height: 10),
 
                 _buildNumberField(
@@ -135,7 +139,6 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                   min: 0,
                   max: 100,
                 ),
-
                 const SizedBox(height: 10),
 
                 _buildNumberField(
@@ -144,14 +147,12 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                   min: 0,
                   max: 100,
                 ),
-
                 const SizedBox(height: 10),
 
                 const Text(
                   "Aircraft Flow",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-
                 const SizedBox(height: 10),
 
                 _buildNumberField(
@@ -159,7 +160,6 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                   label: "Inbound Flow Rate (aircraft/hour)",
                   min: 0,
                 ),
-
                 const SizedBox(height: 10),
 
                 _buildNumberField(
@@ -167,14 +167,12 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                   label: "Outbound Flow Rate (aircraft/hour)",
                   min: 0,
                 ),
-
                 const SizedBox(height: 10),
 
                 const Text(
                   "Operational Limits",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-
                 const SizedBox(height: 10),
 
                 _buildNumberField(
@@ -182,14 +180,12 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                   label: "Max Outbound Wait (minutes)",
                   min: 1,
                 ),
-
                 const SizedBox(height: 10),
                 _buildNumberField(
                   controller: fuelThresholdController,
                   label: "Fuel Diversion Threshold (minutes)",
                   min: 1,
                 ),
-
                 const SizedBox(height: 10),
 
                 _buildNumberField(
@@ -197,7 +193,6 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                   label: "Simulation Duration (hours)",
                   min: 1,
                 ),
-
                 const SizedBox(height: 10),
 
                 Center(
@@ -279,7 +274,6 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
 
   void _confirmRunwayCount() {
     final value = runwayCountController.text;
-
     if (value.isEmpty) return;
 
     final count = int.tryParse(value);
@@ -289,26 +283,15 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
   }
 
   Future<void> _runSimulation() async {
-    await _persistScenarioAndNavigate("/results");
-  }
-
-  Future<void> _realtimeModel() async {
-    await _persistScenarioAndNavigate("/realtime");
-  }
-
-  Future<void> _persistScenarioAndNavigate(String route) async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+    if (!_formKey.currentState!.validate()) return;
 
     try {
       final savedScenario = await _persistScenario();
       if (!mounted) return;
-
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Saved scenario \"${savedScenario.name}\" to SQLite")),
+        SnackBar(content: Text("Saved scenario \"${savedScenario.name}\"")),
       );
-      Navigator.pushNamed(context, route);
+      Navigator.pushNamed(context, "/results");
     } catch (error) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -317,11 +300,20 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
     }
   }
 
+  void _realtimeModel() {
+    if (_formKey.currentState!.validate()) {
+      Navigator.pushNamed(context, "/realtime");
+    }
+  }
+
   Future<ScenarioRecord> _persistScenario() async {
     final timestamp = DateTime.now();
-    final scenarioName = scenarioNameController.text.trim();
+    final fallbackName = "Scenario ${timestamp.toIso8601String()}";
+    final scenarioName = scenarioNameController.text.trim().isEmpty
+        ? fallbackName
+        : scenarioNameController.text.trim();
     final scenarioId =
-        "${timestamp.millisecondsSinceEpoch}-${scenarioName.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]+'), "-")}";
+        "${timestamp.millisecondsSinceEpoch}-${scenarioName.toLowerCase().replaceAll(RegExp(r"[^a-z0-9]+"), "-")}";
 
     final metadata = {
       "runwayCount": runwayCountController.text,
@@ -333,19 +325,23 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
       "fuelThreshold": fuelThresholdController.text,
       "duration": durationController.text,
       "runways": runways
-          .map((runway) => {
-                "mode": runway.mode,
-                "length": runway.lengthController.text,
-                "bearing": runway.bearingController.text,
-                "runwayId": runway.runwayIdController.text,
-                "events": runway.events
-                    .map((event) => {
-                          "type": event.type,
-                          "start": event.startController.text,
-                          "duration": event.durationController.text,
-                        })
-                    .toList(),
-              })
+          .map(
+            (runway) => {
+              "mode": runway.mode,
+              "length": runway.lengthController.text,
+              "bearing": runway.bearingController.text,
+              "runwayId": runway.runwayIdController.text,
+              "events": runway.events
+                  .map(
+                    (event) => {
+                      "type": event.type,
+                      "start": event.startController.text,
+                      "duration": event.durationController.text,
+                    },
+                  )
+                  .toList(),
+            },
+          )
           .toList(),
     };
 

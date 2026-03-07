@@ -6,7 +6,7 @@ import 'package:air_traffic_sim/persistence/repositories/aircraft_log_repository
 import 'package:air_traffic_sim/persistence/repositories/event_repository.dart';
 import 'package:air_traffic_sim/persistence/repositories/metrics_summary_repository.dart';
 import 'package:air_traffic_sim/persistence/repositories/run_repository.dart';
-import 'package:air_traffic_sim/simulation/simulation_stats.dart';
+import 'package:air_traffic_sim/simulation/concretes/simulation_stats.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 import 'orchestrated_simulation_persistence_port.dart';

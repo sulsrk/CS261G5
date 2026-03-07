@@ -1,75 +1,68 @@
-import 'dart:convert';
-
-import 'package:air_traffic_sim/persistence/app_persistence.dart';
 import 'package:air_traffic_sim/persistence/models/scenario_record.dart';
 import 'package:flutter/material.dart';
+import 'package:air_traffic_sim/ui/widgets/scenario_picker_overlay.dart';
 
-class ScenarioScreen extends StatelessWidget {
+
+class ScenarioScreen extends StatefulWidget {
   const ScenarioScreen({super.key});
+
+  @override
+  State<ScenarioScreen> createState() => _ScenarioScreenState();
+}
+
+class _ScenarioScreenState extends State<ScenarioScreen> {
+  ScenarioRecord? _scenarioA;
+  ScenarioRecord? _scenarioB;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Scenario Comparison")),
-      body: FutureBuilder<List<ScenarioRecord>>(
-        future: AppPersistence.instance.store.listScenarios(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (snapshot.hasError) {
-            return Center(
-              child: Text("Failed to load scenarios: ${snapshot.error}"),
-            );
-          }
-
-          final scenarios = snapshot.data ?? const [];
-          if (scenarios.isEmpty) {
-            return const Center(
-              child: Text("No saved scenarios yet. Run a simulation first."),
-            );
-          }
-
-          return ListView.separated(
-            itemCount: scenarios.length,
-            separatorBuilder: (_, __) => const Divider(height: 1),
-            itemBuilder: (context, index) {
-              final scenario = scenarios[index];
-
-              return ListTile(
-                title: Text(scenario.name),
-                subtitle: Text(_decodeDescription(scenario.description)),
-                trailing: Text(
-                  scenario.createdAt.toLocal().toString(),
-                  textAlign: TextAlign.end,
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                _selectionCard(
+                  title: "Scenario A",
+                  selected: _scenarioA,
+                  onSelect: (scenario) => setState(() => _scenarioA = scenario),
                 ),
-              );
-            },
-          );
-        },
+                const SizedBox(height: 16),
+                _selectionCard(
+                  title: "Scenario B",
+                  selected: _scenarioB,
+                  onSelect: (scenario) => setState(() => _scenarioB = scenario),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
 
-  String _decodeDescription(String? description) {
-    if (description == null || description.isEmpty) {
-      return "No scenario details saved";
-    }
-
-    try {
-      final decoded = jsonDecode(description);
-      if (decoded is Map<String, dynamic>) {
-        final runwayCount = decoded["runwayCount"]?.toString() ?? "n/a";
-        final duration = decoded["duration"]?.toString() ?? "n/a";
-        final inboundFlow = decoded["inboundFlow"]?.toString() ?? "n/a";
-        final outboundFlow = decoded["outboundFlow"]?.toString() ?? "n/a";
-        return "Runways: $runwayCount | Duration(h): $duration | In: $inboundFlow/h | Out: $outboundFlow/h";
-      }
-    } catch (_) {
-      return description;
-    }
-
-    return description;
+  Widget _selectionCard({
+    required String title,
+    required ScenarioRecord? selected,
+    required ValueChanged<ScenarioRecord?> onSelect,
+  }) {
+    return Card(
+      child: ListTile(
+        title: Text(title),
+        subtitle: Text(selected?.name ?? "No scenario selected"),
+        trailing: ElevatedButton(
+          onPressed: () async {
+            final scenario = await showScenarioPickerOverlay(context);
+            if (scenario != null) {
+              onSelect(scenario);
+            }
+          },
+          child: const Text("Load Scenario"),
+        ),
+      ),
+    );
   }
 }
