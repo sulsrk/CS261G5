@@ -1,5 +1,5 @@
 import 'package:air_traffic_sim/simulation/interfaces/interface_simulation_persistence_port.dart';
-import 'package:air_traffic_sim/simulation/simulation_stats.dart';
+import 'package:air_traffic_sim/simulation/concretes/simulation_stats.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

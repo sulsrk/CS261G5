@@ -1,4 +1,4 @@
-import 'package:air_traffic_sim/simulation/simulation_stats.dart';
+import 'package:air_traffic_sim/simulation/concretes/simulation_stats.dart';
 
 class MetricsSummaryRecord {
   final int id;

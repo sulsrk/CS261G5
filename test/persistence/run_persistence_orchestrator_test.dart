@@ -22,7 +22,7 @@ import 'package:air_traffic_sim/persistence/models/scenario_record.dart';
 import 'package:air_traffic_sim/persistence/repositories/sqlite/sqlite_persistence_store.dart';
 import 'package:air_traffic_sim/simulation/orchestration/run_persistence_orchestrator.dart';
 import 'package:air_traffic_sim/simulation/interfaces/interface_simulation_persistence_port.dart';
-import 'package:air_traffic_sim/simulation/simulation_stats.dart';
+import 'package:air_traffic_sim/simulation/concretes/simulation_stats.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

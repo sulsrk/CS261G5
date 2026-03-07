@@ -11,7 +11,7 @@ import 'dart:io';
 
 import 'package:air_traffic_sim/persistence/models/scenario_record.dart';
 import 'package:air_traffic_sim/persistence/repositories/sqlite/sqlite_persistence_store.dart';
-import 'package:air_traffic_sim/simulation/simulation_stats.dart';
+import 'package:air_traffic_sim/simulation/concretes/simulation_stats.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqlite3/sqlite3.dart';
 

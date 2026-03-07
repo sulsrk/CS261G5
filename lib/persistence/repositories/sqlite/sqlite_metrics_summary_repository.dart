@@ -2,7 +2,7 @@ import 'package:air_traffic_sim/persistence/database.dart';
 import 'package:air_traffic_sim/persistence/models/metrics_summary_record.dart';
 import 'package:air_traffic_sim/persistence/repositories/metrics_summary_repository.dart';
 import 'package:air_traffic_sim/persistence/repositories/sqlite/sqlite_row_mappers.dart';
-import 'package:air_traffic_sim/simulation/simulation_stats.dart';
+import 'package:air_traffic_sim/simulation/concretes/simulation_stats.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 /// SQLite-backed implementation for persisting aggregate simulation metrics.

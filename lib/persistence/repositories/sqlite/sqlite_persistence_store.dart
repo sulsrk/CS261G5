@@ -14,7 +14,7 @@ import 'package:air_traffic_sim/persistence/repositories/sqlite/sqlite_event_rep
 import 'package:air_traffic_sim/persistence/repositories/sqlite/sqlite_metrics_summary_repository.dart';
 import 'package:air_traffic_sim/persistence/repositories/sqlite/sqlite_run_repository.dart';
 import 'package:air_traffic_sim/persistence/repositories/sqlite/sqlite_scenario_repository.dart';
-import 'package:air_traffic_sim/simulation/simulation_stats.dart';
+import 'package:air_traffic_sim/simulation/concretes/simulation_stats.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 /// Unified SQLite-backed persistence store.
