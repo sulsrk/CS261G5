@@ -1,5 +1,6 @@
 
 import 'package:air_traffic_sim/simulation/concretes/temp_stats.dart';
+import 'package:air_traffic_sim/simulation/enums/aircraft_type.dart';
 
 class TempRealStats extends TempStats {
   final double alpha = 0.1; // Smoothing factor 0<=[alpha]<=1. Higher value increases weighting of new values .
@@ -10,47 +11,25 @@ class TempRealStats extends TempStats {
   double get emAverageLandingDelay => _emAverageLandingDelay ?? 0.0;
   double get emAverageDepatureDelay => _emAverageDepatureDelay ?? 0.0;
 
-  @override
-  void update({
-    required int landingDelay,
-    required int holdTime,
 
-    required int departureDelay,
-    required int waitTime,
-
-    required int cancellations,
-    required int diversions,
-
-    required int landingAircraft,
-    required int departingAircraft,
-
-    required int runwaysUsed,
-    required int availableRunways,
+  /// updates exponential moving average
+  void updateMovingAverage({
+      required double delay,
+      required AircraftType type,
     }) {
-      super.update(
-        landingDelay: landingDelay, 
-        holdTime: holdTime, 
-        departureDelay: departureDelay, 
-        waitTime: waitTime, 
-        cancellations: cancellations, 
-        diversions: diversions, 
-        landingAircraft: landingAircraft, 
-        departingAircraft: departingAircraft,
-        runwaysUsed: runwaysUsed,
-        availableRunways: availableRunways,
-      );
-
-      // Exponential moving average.
-      
-      double averageLanding = landingDelay / landingAircraft;
-      double averageDeparture = departureDelay / departingAircraft;
-
-      if (_emAverageLandingDelay != null) { // if not the first data point, apply the exponential moving average
-        _emAverageLandingDelay = alpha * averageLanding + (1 - alpha) * emAverageLandingDelay;
-        _emAverageDepatureDelay = alpha * averageDeparture + (1 - alpha) * emAverageDepatureDelay;
-      } else {
-        _emAverageLandingDelay = averageLanding;
-        _emAverageDepatureDelay = averageDeparture;
-      }
+    switch (type) {
+      case AircraftType.landing:
+        if (_emAverageLandingDelay != null) { // if not the first data point, apply the exponential moving average
+          _emAverageLandingDelay = alpha * delay + (1 - alpha) * emAverageLandingDelay;
+        } else {
+          _emAverageLandingDelay = delay;
+        }
+      case AircraftType.takeOff:
+        if (_emAverageDepatureDelay != null) { // if not the first data point, apply the exponential moving average
+          _emAverageDepatureDelay = alpha * delay + (1 - alpha) * emAverageDepatureDelay;
+        } else {
+          _emAverageDepatureDelay = delay;
+        }
+    }
   }
 }

@@ -25,57 +25,10 @@ class TempStats {
 
   // Variables to handle section delay.
   int _counter = 0;           // Number of intervals in current section.
-  final int _sectionSize = 10; // The section size.
+  static const int _sectionSize = 10; // The section size.
 
-  /// Updates the statistics with data from the new interval.
-  void update({
-    required int landingDelay,
-    required int holdTime,
-
-    required int departureDelay,
-    required int waitTime,
-
-    required int cancellations,
-    required int diversions,
-
-    required int landingAircraft,
-    required int departingAircraft,
-
-    required int runwaysUsed,
-    required int availableRunways,
-    }) {
-
-      // Maximums.
-
-      maxLandingDelay = landingDelay > maxLandingDelay ? landingDelay : maxLandingDelay;
-      maxDepartureDelay = departureDelay > maxDepartureDelay ? departureDelay : maxDepartureDelay;
-
-      maxInboundQueue = landingAircraft > maxInboundQueue ? landingAircraft : maxInboundQueue;
-      maxOutboundQueue = departingAircraft > maxOutboundQueue ? departingAircraft : maxOutboundQueue;
-
-      // Totals.
-
-      totalCancellations += cancellations;
-      totalDiversions += diversions;
-
-      totalLandingDelay += landingDelay;
-      totalSectionLandingDelay += landingDelay;
-      totalDepartureDelay += departureDelay;
-      totalSectionDepartureDelay += departureDelay;
-
-      totalWaitTime += waitTime;
-      totalHoldTime += holdTime;
-
-      landingAircraftCount += landingAircraft;
-      sectionLandingAircraftCount += landingAircraft;
-      departingAircraftCount += departingAircraft;
-      sectionDepartingAircraftCount += departingAircraft;
-
-      totalRunwayUsage += runwaysUsed;
-      maximumPossibleRunwayUsage += availableRunways;
-
-      // Section average accumulation.
-
+  /// Updates the section average accumulation.
+  void updateSectionAverage() {
       if (++_counter >= _sectionSize) { // If end of section has been reached.
         // Add the section's delays to the lists.
         sectionAverageLandingDelayList.add(totalSectionLandingDelay / sectionLandingAircraftCount);
